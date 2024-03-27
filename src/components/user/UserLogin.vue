@@ -10,8 +10,8 @@
 
                     <div class="d-flex justify-content-center py-4">
                         <a href="index.html" class="logo d-flex align-items-center w-auto">
-                        <img src="assets/logo.png" alt="">
-                        <span class="d-none d-lg-block">LittleLoom Locator</span>
+                        <img alt="Logo" src="@/assets/logo.png">
+                        <!-- <span class="d-none d-lg-block">LittleLoom Locator</span> -->
                         </a>
                     </div><!-- End Logo -->
 
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import LoginService from "@/services/LoginService";
+// import LoginService from "@/services/LoginService";
 
 export default {
     name: "UserLogin",
@@ -85,20 +85,23 @@ export default {
     methods: {
         login(event) {
             event.preventDefault();
-            LoginService.login(this.usertLoginRequest)
-                .then(response => {       
-                    var student = response.data;
-                    console.log(student);
-                    localStorage.setItem("sid", student.id);
-                    this.message = student;
-                    this.$router.push({ name: "studentProfile" });
-                })
-                .catch(e => {
-                    this.usertLoginRequest.studentId = "";
-                    this.usertLoginRequest.password = "";
-                    this.message = e.response.data.message;
-                    console.log(e.response.data);
-                });
+            // LoginService.login(this.usertLoginRequest)
+            //     .then(response => {       
+            //         var student = response.data;
+            //         console.log(student);
+            //         localStorage.setItem("sid", student.id);
+            //         this.message = student;
+            //         this.$router.push({ name: "studentProfile" });
+            //     })
+            //     .catch(e => {
+            //         this.usertLoginRequest.studentId = "";
+            //         this.usertLoginRequest.password = "";
+            //         this.message = e.response.data.message;
+            //         console.log(e.response.data);
+            //     });
+            this.$util.setAuth(true);
+            this.$router.push({ name: "ParentView" });    
+            location.reload();   
         }
     },
     mounted() {   
