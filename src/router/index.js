@@ -1,6 +1,8 @@
 import { createWebHistory, createRouter } from "vue-router";
 import UserLogin from "@/components/user/UserLogin.vue";
-import ParentView from "../components/parent/ParentView.vue";
+import ParentView from "@/components/parent/ParentView.vue";
+import RequestView from "@/components/request/RequestView.vue";
+import ChildrenView from "@/components/children/ChildrenView.vue";
 
 const routes = [
     {
@@ -20,6 +22,18 @@ const routes = [
         alias : '/parent',
         name : "ParentView",
         component : ParentView
+    },
+    {
+        path : "/request",
+        alias : '/request',
+        name : "RequestView",
+        component : RequestView
+    },
+    {
+        path : "/children",
+        alias : '/children',
+        name : "ChildrenView",
+        component : ChildrenView
     }
 ]
 
