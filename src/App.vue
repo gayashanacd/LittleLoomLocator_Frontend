@@ -17,10 +17,10 @@ import LoginLayout from '@/components/user/UserLogin.vue'
 export default{
   name : "app",
   data() {           
-        return {
-          auth : false
-        };
-    },
+    return {
+      auth : false
+    };
+  },
   components:{
     MainLayout,
     LoginLayout
