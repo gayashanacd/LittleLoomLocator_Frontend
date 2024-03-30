@@ -14,19 +14,19 @@
                   <div class="row mb-3">
                     <label for="inputText" class="col-sm-4 col-form-label">Institute Name</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" value="Institute 1" disabled>
+                      <input type="text" class="form-control" v-model="currentInstitute.name" disabled>
                     </div>
                   </div>
                   <div class="row mb-3">
                     <label for="inputText" class="col-sm-4 col-form-label">Program Name</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" value="Program 1" disabled>
+                      <input type="text" class="form-control" v-model="currentInstitute.programName" disabled>
                     </div>
                   </div>
                   <div class="row mb-3">
                     <label for="inputText" class="col-sm-4 col-form-label">Capacity</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" value="28/40" disabled>
+                      <input type="text" class="form-control" v-model="currentInstitute.programCapacity" disabled>
                     </div>
                   </div>
                 </div>
@@ -34,13 +34,13 @@
                   <div class="row mb-3">
                     <label for="inputText" class="col-sm-4 col-form-label">Age Group</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" value="3-5 Years" disabled>
+                      <input type="text" class="form-control" v-model="currentInstitute.ageGroup" disabled>
                     </div>
                   </div>
                   <div class="row mb-3">
                     <label for="inputText" class="col-sm-4 col-form-label">Address</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" value="305, 12th Street, New West, BC, V3G6D4" disabled>
+                      <input type="text" class="form-control" v-model="currentInstitute.address" disabled>
                     </div>
                   </div>
                 </div>
@@ -83,13 +83,20 @@
 
 export default {
     name: "RequestMoreInfoModal",
+    props:["currentItem"],
     data() {           
         return {
-
+          currentInstitute : {}
         };
     },
+    watch:{
+      currentItem(newValue){
+        console.log("newValue >> ", newValue);
+        this.currentInstitute = newValue;    
+      },
+    },
     methods: {
-
+      
     },
     mounted() {   
 
