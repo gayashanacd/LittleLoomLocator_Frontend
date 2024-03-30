@@ -101,8 +101,8 @@
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                   <li class="dropdown-header">
-                    <h6>{{ $util.getParent().firstName + ' ' + $util.getParent().lastName }}</h6>
-                    <span>{{ $util.getParent().address }}</span>
+                    <h6 v-if="$util.getParent()" >{{ $util.getParent().firstName + ' ' + $util.getParent().lastName }}</h6>
+                    <span v-if="$util.getParent()">{{ $util.getParent().address }}</span>
                   </li>
                   <li>
                     <hr class="dropdown-divider">

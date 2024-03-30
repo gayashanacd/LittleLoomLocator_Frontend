@@ -167,9 +167,9 @@ export default {
       },
 
       retreiveParent() {
-            let user = this.$util.getUser();
-            if(user){
-              ParentService.get(user.id)
+            let parent = this.$util.getParent();
+            if(parent){
+              ParentService.get(parent.id)
                 .then(response => { 
                     this.parentRequest = response.data;
                     console.log(this.parentRequest);
@@ -177,8 +177,7 @@ export default {
                 .catch(error => {
                     console.log(error);
                 })
-            }            
-            
+            }
         }
   },
   mounted() {   
