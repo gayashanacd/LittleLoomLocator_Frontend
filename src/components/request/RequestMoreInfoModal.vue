@@ -51,9 +51,10 @@
                     <label for="inputText" class="col-sm-4 col-form-label">Select Child</label>
                     <div class="col-sm-8">
                       <select id="inputChild" class="form-select">
-                        <option selected>Select Child</option>
+                        <!-- <option selected>Select Child</option>
                         <option value="Melissa_Gin">Melissa Gin</option>
-                        <option value="Jack_Gin">Jack Gin</option>
+                        <option value="Jack_Gin">Jack Gin</option> -->
+                        <option v-for="child in children" :key="child.id" :value="child.id">{{ child.firstName }}</option>
                       </select>
                     </div>
                   </div>
@@ -62,10 +63,22 @@
                   <div class="row mb-3">
                     <label for="inputText" class="col-sm-4 col-form-label">Message</label>
                     <div class="col-sm-8">
-                      <textarea class="form-control" style="height: 50px"></textarea>
+                      <textarea class="form-control"></textarea>
                     </div>
                   </div>
-                </div> 
+                </div>
+                <div class="col-md-6">
+                  <div class="row mb-3">
+                    <label for="inputText" class="col-sm-4 col-form-label">Select Type</label>
+                    <div class="col-sm-8">
+                      <select id="inputChild" class="form-select">
+                        <option selected>- Select Type -</option>
+                        <option value="ENROLMENT">Enrollment</option>
+                        <option value="WAITLIST">Waitlist</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>  
               </div>
             </div>  
           </div>
@@ -93,7 +106,13 @@ export default {
     },
     data() {           
         return {
-          currentInstitute : {}
+          currentInstitute : {},
+          children : [],
+          requestPayload : {
+            type : "ENROLMENT",
+            message : "",
+            status : "PENDING"
+          }
         };
     },
     watch:{
@@ -109,7 +128,11 @@ export default {
       }
     },
     mounted() {   
-
+      this.children =  this.$util.getChildren() || [];
+      this.children.unshift({
+        id : -1,
+        firstName : '- Select Child -'
+      });
     }
 };
 </script>

@@ -180,9 +180,31 @@ export default {
       },
       showMoreDetails(currentItem){
         this.currentItem = currentItem;
+      },
+      fetchChildren(){
+        let children = [
+          {
+            "id": 1,
+            "firstName": "Child1 FN",
+            "lastName": "Child 1 LN",
+            "gender": "F",
+            "dateOfBirth": "2020-02-16",
+            "allergy": "No",
+          },
+          {
+            "id": 2,
+            "firstName": "Child2 FN",
+            "lastName": "Child 2 LN",
+            "gender": "F",
+            "dateOfBirth": "2015-06-20",
+            "allergy": "No",
+          }
+        ];
+        this.$util.setChildren(children);
       }
     },
     mounted() {   
+      this.fetchChildren();
       this.search();
     }
 };

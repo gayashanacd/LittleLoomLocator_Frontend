@@ -75,7 +75,7 @@
 
 <script>
 
-//import LoginService from "@/services/LoginService";
+import LoginService from "@/services/LoginService";
 import ParentService from "@/services/ParentService";
 
 export default {
@@ -89,32 +89,32 @@ export default {
     methods: {
         login(event) {
             event.preventDefault();
-            // LoginService.login(this.userLoginRequest)
-            //   .then(response => {       
-            //       let user = response.data;
-            //       console.log(user);
-            //       this.$util.setUser(user);
-            //       this.$util.setAuth(true);
-            //       this.redirectToDashboard(user);
-            //   })
-            //   .catch(e => {
-            //       this.userLoginRequest = {
-            //           username : "",
-            //           password : ""
-            //       },
-            //       this.message = e.response.data.message;
-            //       console.log(e.response.data);
-            //   });
+            LoginService.login(this.userLoginRequest)
+              .then(response => {       
+                  let user = response.data;
+                  console.log(user);
+                  this.$util.setUser(user);
+                  this.$util.setAuth(true);
+                  this.redirectToDashboard(user);
+              })
+              .catch(e => {
+                  this.userLoginRequest = {
+                      username : "",
+                      password : ""
+                  },
+                  this.message = e.response.data.message;
+                  console.log(e.response.data);
+              });
 
-            this.$util.setAuth(true);
-            this.$util.setUser({
-              id: 2,
-              username: "parent",
-              password: "parent",
-              type: "PARENT"   
-            });
-            this.$router.push({ name: "ParentView" });    
-            location.reload();   
+            // this.$util.setAuth(true);
+            // this.$util.setUser({
+            //   id: 2,
+            //   username: "parent",
+            //   password: "parent",
+            //   type: "PARENT"   
+            // });
+            // this.$router.push({ name: "ParentView" });    
+            // location.reload();   
         },
         redirectToDashboard( user ){
           if(user && user.type === "PARENT"){
@@ -143,6 +143,7 @@ export default {
             })
             .catch(e => {
               console.log(e.response.data);
+              this.$router.push({ name: "ParentView" }); 
             });
         },
         getInstitute(){

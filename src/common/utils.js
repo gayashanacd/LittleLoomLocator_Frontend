@@ -27,6 +27,14 @@ class Utils{
         return JSON.parse(localStorage.getItem('parent')); 
     }
 
+    setChildren(children){
+        localStorage.setItem("children", JSON.stringify(children));
+    }
+
+    getChildren(){
+        return JSON.parse(localStorage.getItem('children')); 
+    }
+
     setInstitue(institue){
         localStorage.setItem("institue", JSON.stringify(institue));
     }
