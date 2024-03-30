@@ -106,6 +106,12 @@ export default {
               });
 
             // this.$util.setAuth(true);
+            // this.$util.setUser({
+            //   id: 2,
+            //   username: "parent",
+            //   password: "parent",
+            //   type: "PARENT"   
+            // });
             // this.$router.push({ name: "ParentView" });    
             // location.reload();   
         },

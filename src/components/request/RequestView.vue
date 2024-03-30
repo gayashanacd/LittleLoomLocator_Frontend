@@ -1,6 +1,6 @@
 <template>
     <div >
-      <RequestMoreInfoModal></RequestMoreInfoModal>
+      <RequestMoreInfoModal :currentItem="currentItem"></RequestMoreInfoModal>
       <div class="alert alert-warning alert-dismissible fade show" role="alert" v-if="message">
         {{ message }}
       </div>
@@ -103,7 +103,7 @@
                               <td>{{ item.waitlistingAllowed }}</td>
                               <td>
                                 <div class="btn-group" role="group">
-                                  <button type="button" class="btn btn-info" title="More Info" data-bs-toggle="modal" data-bs-target="#MoreInfoModal"><i class="bi bi-info-circle"></i></button>
+                                  <button type="button" class="btn btn-info" title="More Info" data-bs-toggle="modal" data-bs-target="#MoreInfoModal" @click="showMoreDetails(item)"><i class="bi bi-info-circle"></i></button>
                                 </div>
                               </td>
                             </tr>
@@ -176,6 +176,9 @@ export default {
           .catch(e => {
               this.message = e.response.data.message;
           });
+      },
+      showMoreDetails(currentItem){
+        console.log(currentItem);
       }
     },
     mounted() {   
