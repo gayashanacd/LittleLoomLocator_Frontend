@@ -153,7 +153,9 @@ export default {
       logout(){
         this.$util.setAuth(false);
         this.$router.push({ name: "login" }); 
-        location.reload();   
+        this.$util.wait(200).then(() => {                        
+          location.reload();                        
+        })  
       }
     },
     computed: {

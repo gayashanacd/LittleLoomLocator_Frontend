@@ -118,8 +118,7 @@ export default {
         },
         redirectToDashboard( user ){
           if(user && user.type === "PARENT"){
-            this.getParent(user);
-            this.$router.push({ name: "ParentView" });        
+            this.getParent(user);       
           }
           else if (user && user.type === "INSTITUTE"){
             this.getInstitute();
@@ -132,9 +131,15 @@ export default {
         getParent( user ){
           ParentService.get(user.id)
             .then(response => {       
-              let parent = response.data;
-              console.log(parent);
-              this.$util.setParent(parent);
+              if(!response.data){
+                this.$router.push({ name: "ParentView" }); 
+              }
+              else{
+                let parent = response.data;
+                console.log(parent);
+                this.$util.setParent(parent);
+                this.$router.push({ name: "RequestView" }); 
+              }
             })
             .catch(e => {
               console.log(e.response.data);
