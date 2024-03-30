@@ -2,8 +2,10 @@
     <div>
         <main>
             <div class="container">
-
             <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" v-if="message">
+                  {{ message }}
+                </div>
                 <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
@@ -30,14 +32,14 @@
                             <label for="yourUsername" class="form-label">Username</label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                <input type="text" name="username" class="form-control" id="yourUsername" v-model="usertLoginRequest.username" required>
+                                <input type="text" name="username" class="form-control" id="yourUsername" v-model="userLoginRequest.username" required>
                                 <div class="invalid-feedback">Please enter your username.</div>
                             </div>
                             </div>
 
                             <div class="col-12">
                             <label for="yourPassword" class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" id="yourPassword" v-model="usertLoginRequest.password" required>
+                            <input type="password" name="password" class="form-control" id="yourPassword" v-model="userLoginRequest.password" required>
                             <div class="invalid-feedback">Please enter your password!</div>
                             </div>
 
@@ -72,36 +74,51 @@
 </template>
 
 <script>
-// import LoginService from "@/services/LoginService";
+
+import LoginService from "@/services/LoginService";
 
 export default {
     name: "UserLogin",
     data() {           
         return {
-            usertLoginRequest: { username: "", password: "" },  
-            message: ""
+          userLoginRequest: { username: "", password: "" },  
+          message: ""
         };
     },
     methods: {
         login(event) {
             event.preventDefault();
-            // LoginService.login(this.usertLoginRequest)
-            //     .then(response => {       
-            //         var student = response.data;
-            //         console.log(student);
-            //         localStorage.setItem("sid", student.id);
-            //         this.message = student;
-            //         this.$router.push({ name: "studentProfile" });
-            //     })
-            //     .catch(e => {
-            //         this.usertLoginRequest.studentId = "";
-            //         this.usertLoginRequest.password = "";
-            //         this.message = e.response.data.message;
-            //         console.log(e.response.data);
-            //     });
-            this.$util.setAuth(true);
-            this.$router.push({ name: "ParentView" });    
-            location.reload();   
+            LoginService.login(this.userLoginRequest)
+              .then(response => {       
+                  let user = response.data;
+                  console.log(user);
+                  this.$util.setUser(user);
+                  this.$util.setAuth(true);
+                  this.redirectToDashboard(user);
+              })
+              .catch(e => {
+                  this.userLoginRequest = {
+                      username : "",
+                      password : ""
+                  },
+                  this.message = e.response.data.message;
+                  console.log(e.response.data);
+              });
+
+            // this.$util.setAuth(true);
+            // this.$router.push({ name: "ParentView" });    
+            // location.reload();   
+        },
+        redirectToDashboard( user ){
+            if(user && user.type === "PARENT"){
+                this.$router.push({ name: "ParentView" });      
+            }
+            else if (user && user.type === "INSTITUTE"){
+                this.$router.push({ name: "InstituteView" });  
+            }
+            this.$util.wait(200).then(() => {                        
+              location.reload();                        
+            }) 
         }
     },
     mounted() {   
