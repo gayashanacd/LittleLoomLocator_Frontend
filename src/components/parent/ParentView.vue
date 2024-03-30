@@ -111,14 +111,18 @@ export default {
   data() {           
       return {
           parentRequest: { firstName: "", lastName: "", unit: "", building: "", street: "", city: "", province: "", postalCode: "", phone: "", email: "", 
-                                  emergencyContactName: "", emergencyContactPhone: "" },
+                                  emergencyContactName: "", emergencyContactPhone: "", userId: 0 },
           message: ""
       };
   },
   methods: {
     register(event) {
           event.preventDefault();
-          ParentService.create(this.parentRequest)
+          let user = this.$util.getUser();
+          console.log(user);
+          if(user){
+            this.parentRequest.userId = 1;// user.id;
+            ParentService.create(this.parentRequest)
               .then(response => {
                   let parent = response.data;
                   console.log(parent);
@@ -137,6 +141,8 @@ export default {
                   //this.message = error.response.data.message;
                   console.log(error.response);
               });
+          }
+          
       }
   },
   mounted() {   
