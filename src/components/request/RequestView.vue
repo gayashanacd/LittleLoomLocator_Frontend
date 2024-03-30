@@ -154,7 +154,8 @@ export default {
             city : "",
             ageGroup : "UNDER_36_MONTHS"
           },
-          message : ""
+          message : "",
+          currentItem : {}
         };
     },
     components: {
@@ -178,7 +179,7 @@ export default {
           });
       },
       showMoreDetails(currentItem){
-        console.log(currentItem);
+        this.currentItem = currentItem;
       }
     },
     mounted() {   

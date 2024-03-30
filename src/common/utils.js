@@ -19,6 +19,22 @@ class Utils{
         return JSON.parse(localStorage.getItem('user')); 
     }
 
+    setParent(parent){
+        localStorage.setItem("parent", JSON.stringify(parent));
+    }
+
+    getParent(){
+        return JSON.parse(localStorage.getItem('parent')); 
+    }
+
+    setInstitue(institue){
+        localStorage.setItem("institue", JSON.stringify(institue));
+    }
+
+    getInstitue(){
+        return JSON.parse(localStorage.getItem('institue')); 
+    }
+
     wait(time){        
         return new Promise((resolve) => {        
             setTimeout(function() { resolve() }, time)              

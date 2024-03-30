@@ -96,13 +96,13 @@
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                   <img src="@/assets/profile-img.jpg" alt="Profile" class="rounded-circle">
-                  <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+                  <span class="d-none d-md-block dropdown-toggle ps-2">{{ $util.getUser().username }}</span>
                 </a><!-- End Profile Iamge Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                   <li class="dropdown-header">
-                    <h6>Kevin Anderson</h6>
-                    <span>Web Designer</span>
+                    <h6>{{ $util.getParent().firstName + ' ' + $util.getParent().lastName }}</h6>
+                    <span>{{ $util.getParent().address }}</span>
                   </li>
                   <li>
                     <hr class="dropdown-divider">
@@ -155,6 +155,9 @@ export default {
         this.$router.push({ name: "login" }); 
         location.reload();   
       }
+    },
+    computed: {
+
     },
     mounted() {   
 

@@ -76,6 +76,7 @@
 <script>
 
 import LoginService from "@/services/LoginService";
+import ParentService from "@/services/ParentService";
 
 export default {
     name: "UserLogin",
@@ -116,15 +117,31 @@ export default {
             // location.reload();   
         },
         redirectToDashboard( user ){
-            if(user && user.type === "PARENT"){
-                this.$router.push({ name: "ParentView" });      
-            }
-            else if (user && user.type === "INSTITUTE"){
-                this.$router.push({ name: "InstituteView" });  
-            }
-            this.$util.wait(200).then(() => {                        
-              location.reload();                        
-            }) 
+          if(user && user.type === "PARENT"){
+            this.getParent(user);
+            this.$router.push({ name: "ParentView" });        
+          }
+          else if (user && user.type === "INSTITUTE"){
+            this.getInstitute();
+            this.$router.push({ name: "InstituteView" });  
+          }
+          this.$util.wait(200).then(() => {                        
+            location.reload();                        
+          }) 
+        },
+        getParent( user ){
+          ParentService.get(user.id)
+            .then(response => {       
+              let parent = response.data;
+              console.log(parent);
+              this.$util.setParent(parent);
+            })
+            .catch(e => {
+              console.log(e.response.data);
+            });
+        },
+        getInstitute(){
+          
         }
     },
     mounted() {   

@@ -83,7 +83,14 @@
 
 export default {
     name: "RequestMoreInfoModal",
-    props:["currentItem"],
+    props: {
+      currentItem:{
+        type:Object,
+        default(){
+          return {}
+        }
+      }
+    },
     data() {           
         return {
           currentInstitute : {}
@@ -91,12 +98,15 @@ export default {
     },
     watch:{
       currentItem(newValue){
-        console.log("newValue >> ", newValue);
-        this.currentInstitute = newValue;    
+        this.currentInstitute = this.formatAddress(newValue);   
       },
+      deep: true
     },
     methods: {
-      
+      formatAddress( item ){
+        item.address = `${item.unitNumber} ${item.buildingNumber} ${item.street} ${item.city} ${item.province} ${item.postalCode}`;
+        return item;
+      }
     },
     mounted() {   
 
