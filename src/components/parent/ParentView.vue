@@ -121,8 +121,9 @@ export default {
           let user = this.$util.getUser();
           console.log(user);
           if(user){
-            this.parentRequest.userId = 1;// user.id;
-            ParentService.create(this.parentRequest)
+            this.parentRequest.userId = user.id;
+            if (this.parentRequest.id === 0){
+              ParentService.create(this.parentRequest)
               .then(response => {
                   let parent = response.data;
                   console.log(parent);
@@ -138,15 +139,50 @@ export default {
                   this.parentRequest.email = "";
                   this.parentRequest.emergencyContactName = "";
                   this.parentRequest.emergencyContactPhone = "";
-                  //this.message = error.response.data.message;
                   console.log(error.response);
               });
+            } else {
+              ParentService.update(this.parentRequest.id, this.parentRequest)
+              .then(response => {
+                  let parent = response.data;
+                  console.log(parent);
+                  localStorage.setItem('id', parent.id);
+                  this.message = parent;
+                  this.$router.push({ name: "ChildrenView" });
+              })
+              .catch(error => {
+                  this.parentRequest.firstName = "";
+                  this.parentRequest.lastName = "";
+                  this.parentRequest.address = "";
+                  this.parentRequest.phone = "";
+                  this.parentRequest.email = "";
+                  this.parentRequest.emergencyContactName = "";
+                  this.parentRequest.emergencyContactPhone = "";
+                  console.log(error.response);
+              });
+            }
+            
           }
           
-      }
+      },
+
+      retreiveParent() {
+            let user = this.$util.getUser();
+            if(user){
+              ParentService.get(user.id)
+                .then(response => { 
+                    this.parentRequest = response.data;
+                    console.log(this.parentRequest);
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+            }            
+            
+        }
   },
   mounted() {   
-
+    this.retreiveParent();
   }
 };
 </script>
