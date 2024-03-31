@@ -1,9 +1,6 @@
 <template>
     <div >
       <RequestMoreInfoModal :currentItem="currentItem"></RequestMoreInfoModal>
-      <div class="alert alert-warning alert-dismissible fade show" role="alert" v-if="message">
-        {{ message }}
-      </div>
       <div class="pagetitle">
         <h1>Request</h1>
       </div><!-- End Page Title -->
@@ -154,7 +151,6 @@ export default {
             city : "",
             ageGroup : "UNDER_36_MONTHS"
           },
-          message : "",
           currentItem : {}
         };
     },
@@ -164,18 +160,17 @@ export default {
     },
     methods: {
       search(){
-        this.message = "";
         InstituteService.search(this.searchParams)
           .then(response => {       
-              if(!response.data){
-                this.message = "No records found !";
-              }
-              let institutes = response.data;
-              console.log(institutes);
-              this.tableData = institutes;
+            if(!response.data){
+              this.$util.notify("No records found !", 'info');
+            }
+            let institutes = response.data;
+            console.log(institutes);
+            this.tableData = institutes;
           })
           .catch(e => {
-              this.message = e.response.data.message;
+            this.$util.notify(e.response.data.message);
           });
       },
       showMoreDetails(currentItem){

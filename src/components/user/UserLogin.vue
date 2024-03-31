@@ -1,12 +1,9 @@
 <template>
     <div>
         <main>
-            <div class="container">
+          <div class="container">
             <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert" v-if="message">
-                  {{ message }}
-                </div>
-                <div class="container">
+              <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
@@ -61,11 +58,10 @@
                     </div>
                     </div>
                 </div>
-                </div>
+              </div>
 
             </section>
-
-            </div>
+          </div>
         </main><!-- End #main -->
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
@@ -77,13 +73,13 @@
 
 import LoginService from "@/services/LoginService";
 import ParentService from "@/services/ParentService";
+import InstituteService from "@/services/InstituteService";
 
 export default {
     name: "UserLogin",
     data() {           
         return {
-          userLoginRequest: { username: "", password: "" },  
-          message: ""
+          userLoginRequest: { username: "", password: "" }
         };
     },
     methods: {
@@ -102,6 +98,7 @@ export default {
                       username : "",
                       password : ""
                   },
+                  this.$util.notify(e.response.data.message);
                   this.message = e.response.data.message;
                   console.log(e.response.data);
               });
@@ -121,14 +118,14 @@ export default {
             this.getParent(user);       
           }
           else if (user && user.type === "INSTITUTE"){
-            this.getInstitute();
-            this.$router.push({ name: "InstituteView" });  
+            this.getInstitute(user);
           }
           this.$util.wait(200).then(() => {                        
             location.reload();                        
           }) 
         },
         getParent( user ){
+          // this should be changed to getParentForUserId
           ParentService.get(user.id)
             .then(response => {       
               if(!response.data){
@@ -146,12 +143,28 @@ export default {
               this.$router.push({ name: "ParentView" }); 
             });
         },
-        getInstitute(){
-          
+        getInstitute( user ){
+          // this should be changed to getInstituteForUserId
+          InstituteService.get(user.id)
+            .then(response => {       
+              if(!response.data){
+                this.$router.push({ name: "InstituteView" }); 
+              }
+              else{
+                let institute = response.data;
+                console.log(institute);
+                this.$util.setInstitute(institute);
+                this.$router.push({ name: "RequestView" }); 
+              }
+            })
+            .catch(e => {
+              console.log(e.response.data);
+              this.$router.push({ name: "InstituteView" }); 
+            }); 
         }
     },
     mounted() {   
-        this.message = "";
+
     }
 };
 </script>

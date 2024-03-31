@@ -1,7 +1,20 @@
+
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 class Utils{
 	constructor( ) {
  
 	}   
+
+    notify(message, type){
+      toast(message, {
+        autoClose: 3000,
+        position: "top-center",
+        transition: "slide",
+        type: type || "error",
+      });
+    }
 
     setAuth(status){
         localStorage.setItem("isAuth", status);
@@ -35,11 +48,11 @@ class Utils{
         return JSON.parse(localStorage.getItem('children')); 
     }
 
-    setInstitue(institue){
+    setInstitute(institue){
         localStorage.setItem("institue", JSON.stringify(institue));
     }
 
-    getInstitue(){
+    getInstitute(){
         return JSON.parse(localStorage.getItem('institue')); 
     }
 
