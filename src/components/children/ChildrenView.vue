@@ -53,6 +53,7 @@ export default {
           this.$util.notify(e.response.data.message);
         });
     },
+      // Add child to parent
       addChild(){
         
       }
