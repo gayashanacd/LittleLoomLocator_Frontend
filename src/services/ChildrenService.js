@@ -14,6 +14,11 @@ class ChildrenService{
         return http.put(`/children/${id}`, data);
     }
 
+    delete(id){
+        return http.delete(`/children/${id}`);
+      }
+
+
 }
 
 export default new ChildrenService();
