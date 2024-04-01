@@ -52,7 +52,10 @@ export default {
         .catch(e => {
           this.$util.notify(e.response.data.message);
         });
-    }
+    },
+      addChild(){
+        
+      }
     },
     mounted() {   
       this.retreiveChildren();
