@@ -159,10 +159,10 @@ export default {
         const parent = this.$util.getParent();
         const institute = this.$util.getInstitute();
         let entityStr = "";
-        if(user.type === "INSTITUTE"){
+        if(user.type === "INSTITUTE" && institute){
           entityStr = institute.name;
         }
-        else if(user.type === "PARENT"){
+        else if(user.type === "PARENT" && parent){
           entityStr = `${parent.firstName} ${parent.lastName}`;
         }
         return entityStr;

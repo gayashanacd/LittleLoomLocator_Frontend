@@ -6,6 +6,10 @@ class ParentService{
         return http.get(`/parents/${id}`);
     }
 
+    getChildrenByParentId(id) {
+        return http.get(`/parents/${id}/children`);
+    }
+
     create(data){
         return http.post("/parents", data);
     }

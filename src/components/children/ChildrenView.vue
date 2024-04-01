@@ -28,22 +28,34 @@
 </template>
 
 <script>
+import ParentService from "@/services/ParentService";
 
 export default {
     name: "ChildrenView",
     data() {           
         return {
-            tableData : [
-            { id : 1, firstName : "FN 1", lastname : "LN 1", gender : "Male" },
-            { id : 1, firstName : "FN 2", lastname : "LN 2", gender : "Female" }
-          ],
+            tableData : [],
         };
     },
     methods: {
-
+      retreiveChildren(){
+      const parent = this.$util.getParent();
+      ParentService.getChildrenByParentId(parent.id)
+        .then(response => {       
+          if(!response.data){
+            this.$util.notify("No records found !", 'info');
+          }
+          let children = response.data;
+          console.log(children);
+          this.tableData = children;
+        })
+        .catch(e => {
+          this.$util.notify(e.response.data.message);
+        });
+    }
     },
     mounted() {   
-
+      this.retreiveChildren();
     }
 };
 </script>

@@ -85,6 +85,7 @@ export default {
     methods: {
         login(event) {
             event.preventDefault();
+            
             LoginService.login(this.userLoginRequest)
               .then(response => {       
                   let user = response.data;
@@ -102,16 +103,17 @@ export default {
                   this.message = e.response.data.message;
                   console.log(e.response.data);
               });
-
-            // this.$util.setAuth(true);
-            // this.$util.setUser({
-            //   id: 2,
-            //   username: "parent",
-            //   password: "parent",
-            //   type: "PARENT"   
-            // });
-            // this.$router.push({ name: "ParentView" });    
-            // location.reload();   
+/*
+             this.$util.setAuth(true);
+             this.$util.setUser({
+               id: 2,
+               username: "parent",
+               password: "parent",
+               type: "PARENT"   
+             });
+             this.$router.push({ name: "ParentView" });    
+             location.reload();   
+             */
         },
         redirectToDashboard( user ){
           if(user && user.type === "PARENT"){
