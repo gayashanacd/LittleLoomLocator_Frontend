@@ -26,12 +26,23 @@
                     </div>
                   </div>
                   
-                  <div class="row mb-3">
-                    <label for="inputGender" class="col-sm-2 col-form-label">Gender</label>
-                    <div class="col-sm-10">
-                      <input type="text" class="form-control" id="inputGender" v-model="childRequest.gender">
+                  <fieldset class="row mb-3">
+                  <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
+                  <div class="col-sm-10">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="rdbGender" id="rdbGender1" value="M" v-model="childRequest.gender">
+                      <label class="form-check-label" for="rdbGender1">
+                        Male
+                      </label>
                     </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="rdbGender" id="rdbGender2" value="F" v-model="childRequest.gender">
+                      <label class="form-check-label" for="rdbGender2">
+                        Female
+                      </label>
+                    </div>                    
                   </div>
+                </fieldset>
                   <div class="row mb-3">
                     <label for="inputDOB" class="col-sm-2 col-form-label">Date of birth</label>
                     <div class="col-sm-10">
@@ -46,7 +57,7 @@
                   </div>
                   
                   <div class="text-center">
-                    <button type="submit" class="btn btn-primary form-buttons" @click="addChild">Add</button>
+                    <button type="submit" class="btn btn-primary form-buttons" @click="addChild">{{saveButtonText}}</button>
                     <button type="reset" class="btn btn-secondary" @click="clear">Clear</button>
                   </div>
                 </form><!-- End Horizontal Form -->
@@ -68,7 +79,8 @@
     data() {           
         return {
             childRequest: { firstName: "", lastName: "", gender: "", dateofbirth: "", allergy: "", parent: {}},
-            message: ""
+            message: "",
+            saveButtonText: "Add"
         };
     },
     props: ['retreiveChildren','childId'],
@@ -115,11 +127,11 @@
             
         },
         
-        retreiveChild(id) {
-              //let parent = this.$util.getParent();
+        retreiveChild(id) {            
             ChildrenService.get(id)
                 .then(response => { 
                     this.childRequest = response.data;
+                    this.saveButtonText = "Update"
                     console.log(this.childRequest);
                 })
                 .catch(error => {
@@ -135,10 +147,11 @@
             this.dateofbirth= ""; 
             this.allergy= ""; 
             this.parent= {};
+            this.saveButtonText = "Add";
           }
     },
     mounted() {   
-      this.retreiveChild(this.childId);
+      //this.retreiveChild(this.childId);
     }
   };
   </script>
