@@ -128,7 +128,7 @@ export default {
         },
         getParent( user ){
           // this should be changed to getParentForUserId
-          ParentService.get(user.id)
+          ParentService.getParentByUserId(user.id)
             .then(response => {       
               if(!response.data){
                 this.$router.push({ name: "ParentView" }); 

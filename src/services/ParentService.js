@@ -6,6 +6,10 @@ class ParentService{
         return http.get(`/parents/${id}`);
     }
 
+    getParentByUserId(id){
+        return http.get(`/users/${id}/parent`);
+    }
+
     getChildrenByParentId(id) {
         return http.get(`/parents/${id}/children`);
     }
