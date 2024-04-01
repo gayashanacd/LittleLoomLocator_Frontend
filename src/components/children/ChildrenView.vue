@@ -13,7 +13,7 @@
           <tbody>
           <tr v-for="item in tableData" :key="item.id">
             <td>{{ item.firstName }}</td>
-            <td>{{ item.lastname }}</td>
+            <td>{{ item.lastName }}</td>
             <td>{{ item.gender }}</td>
             <td>
               <div class="btn-group" role="group" >
