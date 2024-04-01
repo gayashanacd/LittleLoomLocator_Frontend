@@ -1,7 +1,7 @@
 import http from "@/common/http-common.js"
 
 class ParentService{
-
+    
     get(id) {
         return http.get(`/parents/${id}`);
     }

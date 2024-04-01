@@ -8,7 +8,7 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="card">
-              <div class="card-body">
+              <div class="card-body" v-if="userType === 'PARENT'">
                 <!-- Default Tabs -->
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                   <li class="nav-item" role="presentation">
@@ -114,6 +114,9 @@
                   </div>
                 </div><!-- End Default Tabs -->
               </div>
+              <div class="card-body" v-else-if="userType === 'INSTITUTE'">
+                <RequestInstituteView></RequestInstituteView>
+              </div>
             </div>
           </div>
         </div>
@@ -124,8 +127,10 @@
 <script>
 
 import InstituteService from "@/services/InstituteService.js";
+import ParentService from "@/services/ParentService";
 import PastRequests from '@/components/request/PastRequests.vue'
 import RequestMoreInfoModal from '@/components/request/RequestMoreInfoModal.vue'
+import RequestInstituteView from '@/components/request/RequestInstituteView.vue'
 
 export default {
     name: "RequestView",
@@ -156,7 +161,14 @@ export default {
     },
     components: {
       PastRequests,
-      RequestMoreInfoModal
+      RequestMoreInfoModal,
+      RequestInstituteView
+    },
+    computed: {
+      userType(){
+        const user = this.$util.getUser();
+        return user.type;
+      }
     },
     methods: {
       search(){
@@ -177,25 +189,35 @@ export default {
         this.currentItem = currentItem;
       },
       fetchChildren(){
-        let children = [
-          {
-            "id": 1,
-            "firstName": "Child1 FN",
-            "lastName": "Child 1 LN",
-            "gender": "F",
-            "dateOfBirth": "2020-02-16",
-            "allergy": "No",
-          },
-          {
-            "id": 2,
-            "firstName": "Child2 FN",
-            "lastName": "Child 2 LN",
-            "gender": "F",
-            "dateOfBirth": "2015-06-20",
-            "allergy": "No",
-          }
-        ];
-        this.$util.setChildren(children);
+        // let children = [
+        //   {
+        //     "id": 1,
+        //     "firstName": "Child1 FN",
+        //     "lastName": "Child 1 LN",
+        //     "gender": "F",
+        //     "dateOfBirth": "2020-02-16",
+        //     "allergy": "No",
+        //   },
+        //   {
+        //     "id": 2,
+        //     "firstName": "Child2 FN",
+        //     "lastName": "Child 2 LN",
+        //     "gender": "F",
+        //     "dateOfBirth": "2015-06-20",
+        //     "allergy": "No",
+        //   }
+        // ];
+        const parent = this.$util.getParent();
+        ParentService.getChildrenByParentId(parent.id)
+          .then(response => {       
+            if(response.data){
+              let children = response.data; 
+              this.$util.setChildren(children);    
+            }
+          })
+          .catch(e => {
+            console.log(e.response.data);
+          });
       }
     },
     mounted() {   

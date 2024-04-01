@@ -30,19 +30,19 @@
 
                 <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
                   <i class="bi bi-chat-left-text"></i>
-                  <span class="badge bg-success badge-number">3</span>
+                  <span class="badge bg-success badge-number">{{ notificationsCount }}</span>
                 </a><!-- End Messages Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
                   <li class="dropdown-header">
-                    You have 3 new messages
-                    <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                    You have {{ notificationsCount }} new messages
+                    <!-- <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a> -->
                   </li>
                   <li>
                     <hr class="dropdown-divider">
                   </li>
 
-                  <li class="message-item">
+                  <!-- <li class="message-item">
                     <a href="#">
                       <img src="@/assets/messages-1.jpg" alt="" class="rounded-circle">
                       <div>
@@ -54,15 +54,16 @@
                   </li>
                   <li>
                     <hr class="dropdown-divider">
-                  </li>
+                  </li> -->
 
-                  <li class="message-item">
+                  <li class="message-item" v-for="item in notifications" :key="item.id">
                     <a href="#">
-                      <img src="@/assets/messages-2.jpg" alt="" class="rounded-circle">
+                      <img v-if="$util.getUser().type === 'INSTITUTE'" src="@/assets/institute_default.png" alt="Profile" class="rounded-circle">
+                      <img v-else src="@/assets/parent_default.png" alt="Profile" class="rounded-circle">
                       <div>
-                        <h4>Anna Nelson</h4>
-                        <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                        <p>6 hrs. ago</p>
+                        <h4>{{ item.senderName }}</h4>
+                        <p>{{ item.message }}</p>
+                        <!-- <p>8 hrs. ago</p> -->
                       </div>
                     </a>
                   </li>
@@ -70,23 +71,9 @@
                     <hr class="dropdown-divider">
                   </li>
 
-                  <li class="message-item">
-                    <a href="#">
-                      <img src="@/assets/messages-3.jpg" alt="" class="rounded-circle">
-                      <div>
-                        <h4>David Muldon</h4>
-                        <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                        <p>8 hrs. ago</p>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider">
-                  </li>
-
-                  <li class="dropdown-footer">
+                  <!-- <li class="dropdown-footer">
                     <a href="#">Show all messages</a>
-                  </li>
+                  </li> -->
 
                 </ul><!-- End Messages Dropdown Items -->
 
@@ -137,11 +124,14 @@
 
 <script>
 
+import NotificationService from "@/services/NotificationService";
+
 export default {
     name: "HeaderBar",
     data() {           
         return {
-
+          notificationsCount : 0,
+          notifications : []
         };
     },
     methods: {
@@ -151,6 +141,20 @@ export default {
         this.$util.wait(200).then(() => {                        
           location.reload();                        
         })  
+      },
+      fetchMessages(){
+        const user = this.$util.getUser();
+        NotificationService.getMyNotifications(user.id)
+          .then(response => {       
+            if(response.data){
+              console.log("Notifications >> ", response.data);
+              this.notificationsCount = response.data.length;
+              this.notifications = response.data;
+            }
+          })
+          .catch(e => {
+            this.$util.notify(e.response.data.message);
+          });
       }
     },
     computed: {
@@ -193,7 +197,7 @@ export default {
       }
     },
     mounted() {   
-
+      this.fetchMessages();
     }
 };
 </script>

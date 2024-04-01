@@ -134,8 +134,11 @@ export default {
         return item;
       },
       makeRequest(){
-        if(this.requestPayload.childId == -1)
+        if(this.requestPayload.childId == -1){
           this.$util.notify("Please select a child !");
+          return;
+        }
+          
         this.requestPayload.instituteId = this.currentInstitute.id;
         this.requestPayload.ageGroup = this.currentInstitute.ageGroup;
         let parent = this.$util.getParent();
@@ -156,10 +159,12 @@ export default {
     },
     mounted() {   
       this.children =  this.$util.getChildren() || [];
-      this.children.unshift({
-        id : -1,
-        firstName : '- Select Child -'
-      });
+      if(this.children.length > 0){
+        this.children.unshift({
+          id : -1,
+          firstName : '- Select Child -'
+        });
+      }
     }
 };
 </script>

@@ -3,28 +3,28 @@
       <div class="col-lg-12">
         <table class="table datatable">
           <thead>
-          <tr>
-              <th>Institute</th>
-              <th>Program</th>
-              <th>Child Name</th>
-              <th>Status</th>
-              <th data-type="date" data-format="YYYY/MM//DD">Date</th>
-              <th>Actions</th>
-          </tr>
+            <tr>
+                <th>Institute</th>
+                <th>Program</th>
+                <th>Child Name</th>
+                <th>Status</th>
+                <th data-type="date" data-format="YYYY/MM//DD">Date</th>
+                <th>Actions</th>
+            </tr>
           </thead>
           <tbody>
-          <tr v-for="item in tableData" :key="item.instituteId">
-            <td>{{ item.instituteName }}</td>
-            <td>{{ item.programName }}</td>
-            <td>{{ item.childName }}</td>
-            <td>{{ item.status }}</td>
-            <td>{{ item.createdDateTime }}</td>
-            <td>
-              <div class="btn-group" role="group" v-if="item.status == 'PENDING'">
-                  <button type="button" class="btn btn-danger" title="Cancel Request"><i class="bi bi-backspace-reverse" @click="cancelRequest(item)"></i></button>
-              </div>
-            </td>
-          </tr>
+            <tr v-for="item in tableData" :key="item.id">
+              <td>{{ item.instituteName }}</td>
+              <td>{{ item.programName }}</td>
+              <td>{{ item.childName }}</td>
+              <td>{{ item.status }}</td>
+              <td>{{ item.createdDateTime }}</td>
+              <td>
+                <div class="btn-group" role="group" v-if="item.status == 'PENDING'">
+                    <button type="button" class="btn btn-danger" title="Cancel Request"><i class="bi bi-backspace-reverse" @click="cancelRequest(item)"></i></button>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
