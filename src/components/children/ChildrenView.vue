@@ -1,4 +1,7 @@
 <template>
+  <div class="pagetitle">
+        <h1>Register Children</h1>
+      </div>
     <div class="row" style="margin-top: 20px;">
       <div class="col-lg-12">
         <table class="table datatable">
@@ -7,6 +10,7 @@
               <th>First Name</th>
               <th>Last Name</th>
               <th>Gender</th>
+              <th data-type="DOB" data-format="YYYY/MM//DD">Date</th>
               <th>Actions</th>
           </tr>
           </thead>
@@ -15,6 +19,7 @@
             <td>{{ item.firstName }}</td>
             <td>{{ item.lastName }}</td>
             <td>{{ item.gender }}</td>
+            <td>{{ item.dateOfBirth }}</td>
             <td>
                 <div class="btn-group" role="group">
                   <button type="button" class="btn btn-info" title="Edit Child" @click="editChild(item)"><i class="bi bi-card-list"></i></button>

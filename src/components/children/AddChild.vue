@@ -1,18 +1,15 @@
 <template>
-    <div >
-      <div class="pagetitle">
-        <h1>Children Registration</h1>
-      </div><!-- End Page Title -->
+    <div>
       <section class="section">
         <div class="row">
-          <div class="col-lg-12">
+          <div class="col-lg-8">
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title"></h5>
   
                 <!-- Horizontal Form -->
                 
-                <form>
+                <form class="row g-3">
                   <div class="row mb-3">
                     <label for="inputFirstName" class="col-sm-2 col-form-label">First Name</label>
                     <div class="col-sm-10">
@@ -45,14 +42,15 @@
                 </fieldset>
                   <div class="row mb-3">
                     <label for="inputDOB" class="col-sm-2 col-form-label">Date of birth</label>
-                    <div class="col-sm-10">
-                      <input type="text" class="form-control" id="inputDOB" v-model="childRequest.dob">
+                    <div class="col-sm-4">
+                      <input type="date" class="form-control" id="inputDOB" v-model="childRequest.dateOfBirth">
                     </div>
-                  </div>
+                  </div>                  
                   <div class="row mb-3">
                     <label for="inputAllergies" class="col-sm-2 col-form-label">Allergies</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" id="inputAllergies" v-model="childRequest.allergy">
+                      <!-- <input type="text" class="form-control" id="inputAllergies" v-model="childRequest.allergy"> -->
+                      <textarea class="form-control" style="height: 100px" id="inputAllergies" v-model="childRequest.allergy"></textarea>
                     </div>
                   </div>
                   
