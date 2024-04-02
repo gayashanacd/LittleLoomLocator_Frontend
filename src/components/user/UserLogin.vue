@@ -127,7 +127,6 @@ export default {
           }) 
         },
         getParent( user ){
-          // this should be changed to getParentForUserId
           ParentService.getParentByUserId(user.id)
             .then(response => {       
               if(!response.data){
@@ -147,7 +146,7 @@ export default {
         },
         getInstitute( user ){
           // this should be changed to getInstituteForUserId
-          InstituteService.get(user.id)
+          InstituteService.getInstituteByUserId(user.id)
             .then(response => {       
               if(!response.data){
                 this.$router.push({ name: "InstituteView" }); 

@@ -22,7 +22,7 @@
             <td>{{ item.dateOfBirth }}</td>
             <td>
                 <div class="btn-group" role="group">
-                  <button type="button" class="btn btn-info" title="Edit Child" @click="editChild(item)"><i class="bi bi-card-list"></i></button>
+                  <button type="button" class="btn btn-info" title="Edit Child" @click="editChild(item)"><i class="bi bi-pencil-square"></i></button>
                   <button type="button" class="btn btn-danger" title="Delete Child" @click="deleteChild(item)"><i class="bi bi-stop-circle"></i></button>
                 </div>
               </td>

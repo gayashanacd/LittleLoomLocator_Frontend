@@ -1,6 +1,6 @@
 <template>
   <div >
-    <ManageRequestModal :currentItem="currentItem"></ManageRequestModal>
+    <ManageRequestModal :currentItem="currentItem" @updateCapacity="setCapacity"></ManageRequestModal>
     <div class="row" style="margin-top: 10px;">
       <div class="col-lg-12">
       <div class="row g-3">
@@ -33,6 +33,12 @@
                   <option value="WAITLIST">Waitlist</option>
                 </select>
               </div> 
+              <div class="col-md-3">
+              </div> 
+              <div class="col-md-3" style="margin-top: 8px;">
+                <label><b>Program Capacity : </b>{{ programCapacity }} </label> &nbsp;
+                <label><b>Available Slots : </b>{{ availableProgramSlots }} </label>
+              </div>
             </div>   
         </div>
         </div>
@@ -60,7 +66,7 @@
               <td>{{ item.childName }}</td>
               <td>{{ item.ageGroup }}</td>
               <td>{{ item.status }}</td>
-              <td>{{ item.createdDateTime }}</td>
+              <td>{{ formatDatetime(item.createdDateTime) }}</td>
               <td>
                 <div class="btn-group" role="group">
                   <button type="button" class="btn btn-info" title="Manage Request" data-bs-toggle="modal" data-bs-target="#ManageRequestModal" @click="manageRequest(item)"><i class="bi bi-card-list"></i></button>
@@ -79,6 +85,7 @@
 
 import ManageRequestModal from '@/components/request/ManageRequestModal.vue'
 import RequestService from "@/services/RequestService";
+import moment from 'moment';
 
 export default {
   name: "RequestInstituteView",
@@ -90,7 +97,11 @@ export default {
         status : "",
         type : "",
       },
-      currentItem : {}
+      currentItem : {},
+      programCapacity : 0,
+      availableProgramSlots : 0,
+      waitlistCapacity : 0,
+      availableWaitlistSlots : 0,
     };
   },
   components: {
@@ -127,10 +138,19 @@ export default {
         .catch(e => {
           this.$util.notify(e.response.data.message);
         });  
+    },
+    formatDatetime(dateTime){
+      return moment(dateTime).format('YYYY-MM-DD, h:mm:ss');
+    },
+    setCapacity(){
+      const institute = this.$util.getInstitute();
+      this.programCapacity = institute.programCapacity;
+      this.availableProgramSlots = institute.programRemainingSlots;
     }
   },
   mounted() {   
     this.search();
+    this.setCapacity();
   }
 };
 </script>

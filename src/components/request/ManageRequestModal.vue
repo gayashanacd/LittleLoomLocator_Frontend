@@ -55,7 +55,7 @@
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
               <button type="button" class="btn btn-primary" @click="manageRequest('CONFIRMED')">Confirm</button>
               <button type="button" class="btn btn-danger" @click="manageRequest('REJECTED')">Reject</button>
-              <button type="button" class="btn btn-info" @click="messageParent">Message</button>
+              <button type="button" class="btn btn-info" @click="messageParent(message)">Message</button>
             </div>
           </div>
         </div>
@@ -66,7 +66,10 @@
   <script>
   
   import RequestService from "@/services/RequestService";
-  
+  import NotificationService from "@/services/NotificationService";
+  import ParentService from "@/services/ParentService";
+  import InstituteService from "@/services/InstituteService";
+
   export default {
       name: "ManageRequestModal",
       props: {
@@ -99,20 +102,87 @@
       },
       methods: {
         manageRequest(action){
+          if(this.currentRequest.status === 'CONFIRMED' && action === 'CONFIRMED'){
+            this.$util.notify("Request is already confirmed !", "warning"); 
+            return;
+          }
+
           this.currentRequest.status = action;  
+          let msg = "Successfully rejected the request !";
+          if(action === 'CONFIRMED'){
+            msg = "Successfully confirmed the request !"; 
+            const institute = this.$util.getInstitute();
+            if(institute.programRemainingSlots === 0){
+              this.$util.notify("Program capacity exeeded !", "warning"); 
+              return;
+            }
+          }
+            
           RequestService.updateRequest(this.currentRequest)
             .then(response => {       
               let request = response.data;
               console.log(request);
-              this.$util.notify("Successfully submitted the request !", "success");
+              this.$util.notify(msg, "success");
+              this.messageParent();
+              if(action === 'CONFIRMED')
+                this.updateAvailableSlots();
             })
             .catch(e => {
               this.$util.notify(e.response.data, "error");
               console.log(e.response.data);
             });
         },
-        messageParent(){
+        updateAvailableSlots(){
+          const institute = this.$util.getInstitute();
+          institute.programRemainingSlots = institute.programRemainingSlots - 1;
+          InstituteService.update(institute)
+            .then(response => {       
+              this.$util.setInstitute(response.data);
+              this.$emit('updateCapacity');   
+            })
+            .catch(e => {
+              console.log(e.response.data);
+            }); 
+        },
+        async messageParent( message ){
+          const user = this.$util.getUser();
+          const institute = this.$util.getInstitute();
+          let msg = message || "Your application is accepted. Please contact the institute for more details.";
+          if(!message && this.currentRequest.status === 'REJECTED')
+            msg = "Your application is rejected. Please keep in touch."; 
 
+          let parent = await this.getParent(this.currentRequest.parentId);
+
+          let notiPayload = {
+            senderId: user.id,
+            senderName: institute.name,
+            receiverId: parent.userId,
+            receiveName: this.currentRequest.parentName,
+            message: msg,
+            read: false
+          };
+
+          NotificationService.create(notiPayload)
+            .then(response => {       
+              console.log(response.data);
+              if(message){
+                this.$util.notify("Successfully sent the message !", "success"); 
+              }
+            })
+            .catch(e => {
+              console.log(e.response.data);
+            });
+        },
+        getParent(id){
+          return new Promise((resolve, reject) => {
+            ParentService.get(id)
+              .then(response => {       
+                resolve(response.data);
+              })
+              .catch(e => {
+                reject(e.response.data);
+              });
+          })
         }
       },
       mounted() {   

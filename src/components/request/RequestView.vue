@@ -208,6 +208,8 @@ export default {
         //   }
         // ];
         const parent = this.$util.getParent();
+        if(!parent)
+          return false;
         ParentService.getChildrenByParentId(parent.id)
           .then(response => {       
             if(response.data){
