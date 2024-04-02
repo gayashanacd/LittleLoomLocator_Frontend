@@ -1,10 +1,9 @@
 <template>
     <div>
         <main>
-            <div class="container">
-
+          <div class="container">
             <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-                <div class="container">
+              <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
@@ -30,14 +29,14 @@
                             <label for="yourUsername" class="form-label">Username</label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                <input type="text" name="username" class="form-control" id="yourUsername" v-model="usertLoginRequest.username" required>
+                                <input type="text" name="username" class="form-control" id="yourUsername" v-model="userLoginRequest.username" required>
                                 <div class="invalid-feedback">Please enter your username.</div>
                             </div>
                             </div>
 
                             <div class="col-12">
                             <label for="yourPassword" class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" id="yourPassword" v-model="usertLoginRequest.password" required>
+                            <input type="password" name="password" class="form-control" id="yourPassword" v-model="userLoginRequest.password" required>
                             <div class="invalid-feedback">Please enter your password!</div>
                             </div>
 
@@ -59,11 +58,10 @@
                     </div>
                     </div>
                 </div>
-                </div>
+              </div>
 
             </section>
-
-            </div>
+          </div>
         </main><!-- End #main -->
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
@@ -72,40 +70,103 @@
 </template>
 
 <script>
-// import LoginService from "@/services/LoginService";
+
+import LoginService from "@/services/LoginService";
+import ParentService from "@/services/ParentService";
+import InstituteService from "@/services/InstituteService";
 
 export default {
     name: "UserLogin",
     data() {           
         return {
-            usertLoginRequest: { username: "", password: "" },  
-            message: ""
+          userLoginRequest: { username: "", password: "" }
         };
     },
     methods: {
         login(event) {
             event.preventDefault();
-            // LoginService.login(this.usertLoginRequest)
-            //     .then(response => {       
-            //         var student = response.data;
-            //         console.log(student);
-            //         localStorage.setItem("sid", student.id);
-            //         this.message = student;
-            //         this.$router.push({ name: "studentProfile" });
-            //     })
-            //     .catch(e => {
-            //         this.usertLoginRequest.studentId = "";
-            //         this.usertLoginRequest.password = "";
-            //         this.message = e.response.data.message;
-            //         console.log(e.response.data);
-            //     });
-            this.$util.setAuth(true);
-            this.$router.push({ name: "ParentView" });    
-            location.reload();   
+            
+            LoginService.login(this.userLoginRequest)
+              .then(response => {       
+                  let user = response.data;
+                  console.log(user);
+                  this.$util.setUser(user);
+                  this.$util.setAuth(true);
+                  this.redirectToDashboard(user);
+              })
+              .catch(e => {
+                  this.userLoginRequest = {
+                      username : "",
+                      password : ""
+                  },
+                  this.$util.notify(e.response.data.message);
+                  this.message = e.response.data.message;
+                  console.log(e.response.data);
+              });
+/*
+             this.$util.setAuth(true);
+             this.$util.setUser({
+               id: 2,
+               username: "parent",
+               password: "parent",
+               type: "PARENT"   
+             });
+             this.$router.push({ name: "ParentView" });    
+             location.reload();   
+             */
+        },
+        redirectToDashboard( user ){
+          if(user && user.type === "PARENT"){
+            this.getParent(user);       
+          }
+          else if (user && user.type === "INSTITUTE"){
+            this.getInstitute(user);
+          }
+          this.$util.wait(200).then(() => {                        
+            location.reload();                        
+          }) 
+        },
+        getParent( user ){
+          // this should be changed to getParentForUserId
+          ParentService.getParentByUserId(user.id)
+            .then(response => {       
+              if(!response.data){
+                this.$router.push({ name: "ParentView" }); 
+              }
+              else{
+                let parent = response.data;
+                console.log(parent);
+                this.$util.setParent(parent);
+                this.$router.push({ name: "RequestView" }); 
+              }
+            })
+            .catch(e => {
+              console.log(e.response.data);
+              this.$router.push({ name: "ParentView" }); 
+            });
+        },
+        getInstitute( user ){
+          // this should be changed to getInstituteForUserId
+          InstituteService.get(user.id)
+            .then(response => {       
+              if(!response.data){
+                this.$router.push({ name: "InstituteView" }); 
+              }
+              else{
+                let institute = response.data;
+                console.log(institute);
+                this.$util.setInstitute(institute);
+                this.$router.push({ name: "RequestView" }); 
+              }
+            })
+            .catch(e => {
+              console.log(e.response.data);
+              this.$router.push({ name: "InstituteView" }); 
+            }); 
         }
     },
     mounted() {   
-        this.message = "";
+
     }
 };
 </script>

@@ -10,12 +10,12 @@
             <i class="bi bi-list toggle-sidebar-btn"></i>
           </div><!-- End Logo -->
 
-          <div class="search-bar">
+          <!-- <div class="search-bar">
             <form class="search-form d-flex align-items-center" method="POST" action="#">
               <input type="text" name="query" placeholder="Search" title="Enter search keyword">
               <button type="submit" title="Search"><i class="bi bi-search"></i></button>
             </form>
-          </div><!-- End Search Bar -->
+          </div> -->
 
           <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
@@ -30,19 +30,19 @@
 
                 <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
                   <i class="bi bi-chat-left-text"></i>
-                  <span class="badge bg-success badge-number">3</span>
+                  <span class="badge bg-success badge-number">{{ notificationsCount }}</span>
                 </a><!-- End Messages Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
                   <li class="dropdown-header">
-                    You have 3 new messages
-                    <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                    You have {{ notificationsCount }} new messages
+                    <!-- <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a> -->
                   </li>
                   <li>
                     <hr class="dropdown-divider">
                   </li>
 
-                  <li class="message-item">
+                  <!-- <li class="message-item">
                     <a href="#">
                       <img src="@/assets/messages-1.jpg" alt="" class="rounded-circle">
                       <div>
@@ -54,15 +54,16 @@
                   </li>
                   <li>
                     <hr class="dropdown-divider">
-                  </li>
+                  </li> -->
 
-                  <li class="message-item">
+                  <li class="message-item" v-for="item in notifications" :key="item.id">
                     <a href="#">
-                      <img src="@/assets/messages-2.jpg" alt="" class="rounded-circle">
+                      <img v-if="$util.getUser().type === 'INSTITUTE'" src="@/assets/institute_default.png" alt="Profile" class="rounded-circle">
+                      <img v-else src="@/assets/parent_default.png" alt="Profile" class="rounded-circle">
                       <div>
-                        <h4>Anna Nelson</h4>
-                        <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                        <p>6 hrs. ago</p>
+                        <h4>{{ item.senderName }}</h4>
+                        <p>{{ item.message }}</p>
+                        <!-- <p>8 hrs. ago</p> -->
                       </div>
                     </a>
                   </li>
@@ -70,23 +71,9 @@
                     <hr class="dropdown-divider">
                   </li>
 
-                  <li class="message-item">
-                    <a href="#">
-                      <img src="@/assets/messages-3.jpg" alt="" class="rounded-circle">
-                      <div>
-                        <h4>David Muldon</h4>
-                        <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                        <p>8 hrs. ago</p>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider">
-                  </li>
-
-                  <li class="dropdown-footer">
+                  <!-- <li class="dropdown-footer">
                     <a href="#">Show all messages</a>
-                  </li>
+                  </li> -->
 
                 </ul><!-- End Messages Dropdown Items -->
 
@@ -95,21 +82,22 @@
               <li class="nav-item dropdown pe-3">
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                  <img src="@/assets/profile-img.jpg" alt="Profile" class="rounded-circle">
-                  <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+                  <img v-if="$util.getUser().type === 'INSTITUTE'" src="@/assets/institute_default.png" alt="Profile" class="rounded-circle">
+                  <img v-else src="@/assets/parent_default.png" alt="Profile" class="rounded-circle">
+                  <span class="d-none d-md-block dropdown-toggle ps-2">{{ $util.getUser().username }}</span>
                 </a><!-- End Profile Iamge Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                   <li class="dropdown-header">
-                    <h6>Kevin Anderson</h6>
-                    <span>Web Designer</span>
+                    <h6>{{ entityName }}</h6>
+                    <span>{{ entityAddress }}</span>
                   </li>
                   <li>
                     <hr class="dropdown-divider">
                   </li>
 
                   <li>
-                    <router-link class="dropdown-item d-flex align-items-center" to="/parent">
+                    <router-link class="dropdown-item d-flex align-items-center" :to="profileRouterPath">
                       <i class="bi bi-person"></i>
                       <span>My Profile</span>
                     </router-link>
@@ -119,16 +107,10 @@
                   </li>
 
                   <li>
-                    <!-- <router-link class="dropdown-item d-flex align-items-center" to="/login" @click="logout">
-                      <i class="bi bi-box-arrow-right"></i>
-                      <span>Sign Out</span>
-                    </router-link> -->
-
                     <a class="dropdown-item d-flex align-items-center" href="#" v-on:click.prevent="logout">
                       <i class="bi bi-box-arrow-right"></i>
                       <span>Sign Out</span>
                     </a>
-
                   </li>
 
                 </ul><!-- End Profile Dropdown Items -->
@@ -142,22 +124,80 @@
 
 <script>
 
+import NotificationService from "@/services/NotificationService";
+
 export default {
     name: "HeaderBar",
     data() {           
         return {
-
+          notificationsCount : 0,
+          notifications : []
         };
     },
     methods: {
       logout(){
         this.$util.setAuth(false);
         this.$router.push({ name: "login" }); 
-        location.reload();   
+        this.$util.wait(200).then(() => {                        
+          location.reload();                        
+        })  
+      },
+      fetchMessages(){
+        const user = this.$util.getUser();
+        NotificationService.getMyNotifications(user.id)
+          .then(response => {       
+            if(response.data){
+              console.log("Notifications >> ", response.data);
+              this.notificationsCount = response.data.length;
+              this.notifications = response.data;
+            }
+          })
+          .catch(e => {
+            this.$util.notify(e.response.data.message);
+          });
+      }
+    },
+    computed: {
+      entityName(){
+        const user = this.$util.getUser();
+        const parent = this.$util.getParent();
+        const institute = this.$util.getInstitute();
+        let entityStr = "";
+        if(user.type === "INSTITUTE" && institute){
+          entityStr = institute.name;
+        }
+        else if(user.type === "PARENT" && parent){
+          entityStr = `${parent.firstName} ${parent.lastName}`;
+        }
+        return entityStr;
+      },
+      entityAddress(){
+        const user = this.$util.getUser();
+        const parent = this.$util.getParent();
+        const institute = this.$util.getInstitute();
+        let retrunStr = "";
+        if(user.type === "INSTITUTE"){
+          retrunStr = institute.city;
+        }
+        else if(user.type === "PARENT"){
+          retrunStr = parent.city;
+        }
+        return retrunStr;
+      },
+      profileRouterPath(){
+        const user = this.$util.getUser();
+        let router = "/parent";
+        if(user.type === "INSTITUTE"){
+          router = "/institute";
+        }
+        else if(user.type === "PARENT"){
+          router = "/parent";
+        }
+        return router;  
       }
     },
     mounted() {   
-
+      this.fetchMessages();
     }
 };
 </script>
