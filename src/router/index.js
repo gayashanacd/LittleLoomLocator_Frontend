@@ -4,6 +4,7 @@ import ParentView from "@/components/parent/ParentView.vue";
 import RequestView from "@/components/request/RequestView.vue";
 import ChildrenView from "@/components/children/ChildrenView.vue";
 import InstituteView from "@/components/institute/InstituteView.vue";
+import RegistrationView from "@/components/registration/RegistrationView.vue";
 
 const routes = [
     {
@@ -41,6 +42,12 @@ const routes = [
         alias : '/institute',
         name : "InstituteView",
         component : InstituteView
+    },
+    {
+        path : "/register",
+        alias : '/register',
+        name : "RegistrationView",
+        component : RegistrationView
     }
 ]
 
