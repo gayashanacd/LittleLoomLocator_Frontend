@@ -79,37 +79,37 @@
 // import LoginService from "@/services/LoginService";
 
 export default {
-    name: "UserLogin",
+    name: "RegisterationView",
     data() {           
-        return {
-            usertLoginRequest: { username: "", password: "" },  
-            message: ""
-        };
+        // return {
+        //     usertLoginRequest: { username: "", password: "" },  
+        //     message: ""
+        // };
     },
     methods: {
-        login(event) {
-            event.preventDefault();
-            // LoginService.login(this.usertLoginRequest)
-            //     .then(response => {       
-            //         var student = response.data;
-            //         console.log(student);
-            //         localStorage.setItem("sid", student.id);
-            //         this.message = student;
-            //         this.$router.push({ name: "studentProfile" });
-            //     })
-            //     .catch(e => {
-            //         this.usertLoginRequest.studentId = "";
-            //         this.usertLoginRequest.password = "";
-            //         this.message = e.response.data.message;
-            //         console.log(e.response.data);
-            //     });
-            this.$util.setAuth(true);
-            this.$router.push({ name: "ParentView" });    
-            location.reload();   
-        }
+        // login(event) {
+        //     event.preventDefault();
+        //     // LoginService.login(this.usertLoginRequest)
+        //     //     .then(response => {       
+        //     //         var student = response.data;
+        //     //         console.log(student);
+        //     //         localStorage.setItem("sid", student.id);
+        //     //         this.message = student;
+        //     //         this.$router.push({ name: "studentProfile" });
+        //     //     })
+        //     //     .catch(e => {
+        //     //         this.usertLoginRequest.studentId = "";
+        //     //         this.usertLoginRequest.password = "";
+        //     //         this.message = e.response.data.message;
+        //     //         console.log(e.response.data);
+        //     //     });
+        //     this.$util.setAuth(true);
+        //     this.$router.push({ name: "ParentView" });    
+        //     location.reload();   
+        // }
     },
     mounted() {   
-        this.message = "";
+        // this.message = "";
     }
 };
 </script>

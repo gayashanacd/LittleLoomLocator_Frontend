@@ -3,6 +3,7 @@ import UserLogin from "@/components/user/UserLogin.vue";
 import ParentView from "@/components/parent/ParentView.vue";
 import RequestView from "@/components/request/RequestView.vue";
 import ChildrenView from "@/components/children/ChildrenView.vue";
+import RegistrationView from "@/components/registration/RegistrationView.vue";
 
 const routes = [
     {
@@ -34,6 +35,12 @@ const routes = [
         alias : '/children',
         name : "ChildrenView",
         component : ChildrenView
+    },
+    {
+        path : "/register",
+        alias : '/register',
+        name : "RegistrationView",
+        component : RegistrationView
     }
 ]
 
