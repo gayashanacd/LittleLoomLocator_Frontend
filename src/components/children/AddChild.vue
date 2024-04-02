@@ -93,11 +93,11 @@
                 ChildrenService.create(this.childRequest)
                 .then(response => {
                     let child = response.data;
-                    console.log(child);
-                    localStorage.setItem('Child id', child.id);
-                    this.message = child;
-                    this.retreiveChildren();
-                    //this.$router.push({ name: "ChildrenView" });
+                    this.message = child;                    
+                    this.$util.notify("Successfully added the child !", "success");
+                    this.$util.wait(1000).then(() => {                        
+                      this.retreiveChildren();                       
+                    }) 
                 })
                 .catch(error => {
                     this.childRequest.firstName = "";
@@ -108,11 +108,11 @@
                 ChildrenService.update(this.childRequest.id, this.childRequest)
                 .then(response => {
                     let child = response.data;
-                    console.log(child);
-                    localStorage.setItem('Child id', child.id);
                     this.message = child;
-                    this.retreiveChildren();
-                    //this.$router.push({ name: "ChildrenView" });
+                    this.$util.notify("Successfully updated the child !", "success");
+                    this.$util.wait(1000).then(() => {                        
+                      this.retreiveChildren();                       
+                    })
                 })
                 .catch(error => {
                     this.childRequest.firstName = "";

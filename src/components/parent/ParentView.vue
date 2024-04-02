@@ -126,10 +126,11 @@ export default {
               ParentService.create(this.parentRequest)
               .then(response => {
                   let parent = response.data;
-                  console.log(parent);
-                  localStorage.setItem('id', parent.id);
                   this.message = parent;
-                  this.$router.push({ name: "ChildrenView" });
+                  this.$util.notify("Successfully saved the parent detail !", "success");
+                    this.$util.wait(1000).then(() => {                        
+                      this.$router.push({ name: "ChildrenView" });                       
+                    })                  
               })
               .catch(error => {
                   this.parentRequest.firstName = "";
@@ -145,10 +146,11 @@ export default {
               ParentService.update(this.parentRequest.id, this.parentRequest)
               .then(response => {
                   let parent = response.data;
-                  console.log(parent);
-                  localStorage.setItem('id', parent.id);
                   this.message = parent;
-                  this.$router.push({ name: "ChildrenView" });
+                  this.$util.notify("Successfully updated the parent detail !", "success");
+                    this.$util.wait(1000).then(() => {                        
+                      this.$router.push({ name: "ChildrenView" });                       
+                    })
               })
               .catch(error => {
                   this.parentRequest.firstName = "";
