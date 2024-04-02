@@ -30,26 +30,23 @@
                             <label for="yourUsername" class="form-label">Username</label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                <input type="text" name="username" class="form-control" id="yourUsername" v-model="usertLoginRequest.username" required>
+                                <input type="text" name="username" class="form-control" id="yourUsername" v-model="registrationRequest.username" required>
                                 <div class="invalid-feedback">Please enter your username.</div>
                             </div>
                             </div>
 
                             <div class="col-12">
                             <label for="yourPassword" class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" id="yourPassword" v-model="usertLoginRequest.password" required>
+                            <input type="password" name="password" class="form-control" id="yourPassword" v-model="registrationRequest.password" required>
                             <div class="invalid-feedback">Please enter your password!</div>
                             </div>
 
                             <div class="col-12">
-                            <div class="form-select">
-                                <select class="form-select" name="userType">
-                                    <option selected="">Select the type</option>
+                                <select class="form-select" name="userType" v-model="registrationRequest.userType">
+                                    <option value="" selected>- Select the type - </option>
                                     <option value="parent">Parent</option>
                                     <option value="institute">Institute</option>
-                                <!-- <option value="3">Three</option> -->
                                 </select>
-                            </div>
                             </div>
                             <div class="col-12">
                             <button class="btn btn-primary w-100" type="submit">Register</button>
@@ -79,12 +76,12 @@
 // import LoginService from "@/services/LoginService";
 
 export default {
-    name: "RegisterationView",
+    name: "RegistrationView",
     data() {           
-        // return {
-        //     usertLoginRequest: { username: "", password: "" },  
-        //     message: ""
-        // };
+        return {
+            registrationRequest: { username: "", password: "", userType: "" },  
+            message: ""
+        };
     },
     methods: {
         // login(event) {
@@ -109,7 +106,7 @@ export default {
         // }
     },
     mounted() {   
-        // this.message = "";
+         this.message = "";
     }
 };
 </script>
