@@ -33,7 +33,7 @@
                   <span class="badge bg-success badge-number">{{ notificationsCount }}</span>
                 </a><!-- End Messages Icon -->
 
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages" style="width: 350px;">
                   <li class="dropdown-header">
                     You have {{ notificationsCount }} new messages
                     <!-- <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a> -->
@@ -57,13 +57,13 @@
                   </li> -->
 
                   <li class="message-item" v-for="item in notifications" :key="item.id">
-                    <a href="#">
+                    <a href="#" @click="updateNotification(item)">
                       <img v-if="$util.getUser().type === 'INSTITUTE'" src="@/assets/institute_default.png" alt="Profile" class="rounded-circle">
                       <img v-else src="@/assets/parent_default.png" alt="Profile" class="rounded-circle">
                       <div>
                         <h4>{{ item.senderName }}</h4>
                         <p>{{ item.message }}</p>
-                        <!-- <p>8 hrs. ago</p> -->
+                        <p>{{ item.relDate }}</p>
                       </div>
                     </a>
                   </li>
@@ -125,6 +125,8 @@
 <script>
 
 import NotificationService from "@/services/NotificationService";
+import moment from 'moment';
+import lodash from 'lodash';
 
 export default {
     name: "HeaderBar",
@@ -148,8 +150,30 @@ export default {
           .then(response => {       
             if(response.data){
               console.log("Notifications >> ", response.data);
-              this.notificationsCount = response.data.length;
-              this.notifications = response.data;
+              this.notifications = this.formatData(response.data);
+              this.notificationsCount = this.notifications.length;
+            }
+          })
+          .catch(e => {
+            this.$util.notify(e.response.data.message);
+          });
+      },
+      formatData( notifications ){
+        notifications.forEach(item => {
+          item.relDate = moment(item.createdDateTime).fromNow();      
+        });
+        notifications = lodash.filter(notifications, { 'read': false });
+        return lodash.sortBy( notifications , 'createdDateTime').reverse();
+      },
+      updateNotification(item){
+        item.read = true;
+        NotificationService.update(item)
+          .then(response => {       
+            if(response.data){
+              console.log("Updated Notification >> ", response.data);
+              this.$util.wait(1000).then(() => {                        
+                this.fetchMessages();                       
+              });
             }
           })
           .catch(e => {

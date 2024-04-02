@@ -14,7 +14,7 @@ class NotificationService{
   }
 
   update(data){
-    return http.put(`/notifications/${data.id}`, data);
+    return http.patch(`/notifications/${data.id}`, data);
   }
 
   delete(id){
