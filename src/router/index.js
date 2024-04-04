@@ -44,8 +44,8 @@ const routes = [
         component : InstituteView
     },
     {
-        path : "/register",
-        alias : '/register',
+        path : "/users",
+        alias : '/users',
         name : "RegistrationView",
         component : RegistrationView
     }
