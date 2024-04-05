@@ -153,16 +153,108 @@
 
         data(){
             return{
-                instituteRequest: {
-
-                },
+                instituteRequest: { name: "", unitNumber: "", buildingNumber: "", street: "", city: "", province: "", postalCode: "", 
+                contactName: "", contactPhone: "", webSite: "", email: "", programName: "", ageGroup: "", programCapacity: 0, 
+                programRemainingSlots: 0, waitlistingAllowed: "", waitlistCapacity: 0, userId: 0 },
                 message: ""
             };
         },
 
+        methods: {
+            register(event) {
+                event.preventDefault();
+                let user = this.$util.getUser();
+                console.log(user);
+                if(user){
+                    this.instituteRequest.userId = user.id;
+                    if (this.instituteRequest.id === 0){
+                    InstituteService.create(this.instituteRequest)
+                    .then(response => {
+                        let institute = response.data;
+                        this.message = institute;
+                        this.$util.notify("Successfully saved the institute detail !", "success");
+                            this.$util.wait(1000).then(() => {                        
+                            this.$router.push({ name: "InstituteView" });                       
+                            })                  
+                    })
+                    .catch(error => {
+                        this.instituteRequest.name = "";
+                        this.instituteRequest.unitNumber = "";
+                        this.instituteRequest.buildingNumber = "";
+                        this.instituteRequest.street = "";
+                        this.instituteRequest.city = "";
+                        this.instituteRequest.province = "";
+                        this.instituteRequest.postalCode = "";
+                        this.instituteRequest.contactName = "";
+                        this.instituteRequest.contactPhone = "";
+                        this.instituteRequest.webSite = "";
+                        this.instituteRequest.email = "";
+                        this.instituteRequest.programName = "";
+                        this.instituteRequest.ageGroup = "";
+                        this.instituteRequest.programCapacity = 0;
+                        this.instituteRequest.programRemainingSlots = 0;
+                        this.instituteRequest.waitlistingAllowed = "";
+                        this.instituteRequest.waitlistCapacity = 0;
+                        this.instituteRequest.userId = 0;
+                        console.log(error.response);
+                    });
+                    } else {
+                    InstituteService.update(this.instituteRequest)
+                    .then(response => {
+                        let institute = response.data;
+                        this.message = institute;
+                        this.$util.notify("Successfully updated the institute detail !", "success");
+                            this.$util.wait(1000).then(() => {                        
+                            this.$router.push({ name: "InstituteView" });                       
+                            })
+                    })
+                    .catch(error => {
+                        this.instituteRequest.name = "";
+                        this.instituteRequest.unitNumber = "";
+                        this.instituteRequest.buildingNumber = "";
+                        this.instituteRequest.street = "";
+                        this.instituteRequest.city = "";
+                        this.instituteRequest.province = "";
+                        this.instituteRequest.postalCode = "";
+                        this.instituteRequest.contactName = "";
+                        this.instituteRequest.contactPhone = "";
+                        this.instituteRequest.webSite = "";
+                        this.instituteRequest.email = "";
+                        this.instituteRequest.programName = "";
+                        this.instituteRequest.ageGroup = "";
+                        this.instituteRequest.programCapacity = 0;
+                        this.instituteRequest.programRemainingSlots = 0;
+                        this.instituteRequest.waitlistingAllowed = "";
+                        this.instituteRequest.waitlistCapacity = 0;
+                        this.instituteRequest.userId = 0;
+                        console.log(error.response);
+                    });
+                    }
+                    
+                }
+                
+            },
+
+            retreiveInstitute() {
+                    let institute = this.$util.getInstitute();
+                    if(institute){
+                    InstituteService.get(institute.id)
+                        .then(response => { 
+                            this.instituteRequest = response.data;
+                            console.log(this.instituteRequest);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                    }
+                }
+        },
+
+        mounted() {   
+            this.retreiveInstitute();
+        }
+
     }
-
-
 
 </script>
 
