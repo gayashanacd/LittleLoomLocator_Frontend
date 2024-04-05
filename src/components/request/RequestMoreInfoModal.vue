@@ -91,6 +91,9 @@
 <script>
 
 import RequestService from "@/services/RequestService";
+import InstituteService from "@/services/InstituteService";
+import NotificationService from "@/services/NotificationService";
+import lodash from 'lodash';
 
 export default {
     name: "RequestMoreInfoModal",
@@ -140,22 +143,63 @@ export default {
         }
           
         this.requestPayload.instituteId = this.currentInstitute.id;
+        this.requestPayload.instituteName = this.currentInstitute.name;
+        this.requestPayload.programName = this.currentInstitute.programName;
         this.requestPayload.ageGroup = this.currentInstitute.ageGroup;
         let parent = this.$util.getParent();
-        if(parent)
+        if(parent){
           this.requestPayload.parentId = parent.id;
+          this.requestPayload.parentName = `${parent.firstName} ${parent.lastName}` ;
+        }
+        let selectedChild = lodash.find(this.children, { 'id': this.requestPayload.childId });
+        if(selectedChild)
+          this.requestPayload.childName = `${selectedChild.firstName} ${selectedChild.lastName}`;
 
         RequestService.createRequest(this.requestPayload)
           .then(response => {       
             let request = response.data;
             console.log(request);
             this.$util.notify("Successfully submitted the request !", "success");
+            this.notifyInstitute();
           })
           .catch(e => {
             this.$util.notify(e.response.data, "error");
             console.log(e.response.data);
           });
-      }
+      },
+      async notifyInstitute(){
+        const user = this.$util.getUser();
+        const parent = this.$util.getParent();
+        let institute = await this.getInstitute(this.requestPayload.instituteId);
+
+        let notiPayload = {
+          senderId: user.id,
+          senderName: `${parent.firstName} ${parent.lastName}`,
+          receiverId: institute.userId,
+          receiveName: this.requestPayload.instituteName,
+          message: 'New application is received.',
+          read: false
+        };
+
+        NotificationService.create(notiPayload)
+          .then(response => {       
+            console.log(response.data);
+          })
+          .catch(e => {
+            console.log(e.response.data);
+          });
+        },
+        getInstitute(id){
+          return new Promise((resolve, reject) => {
+            InstituteService.get(id)
+              .then(response => {       
+                resolve(response.data);
+              })
+              .catch(e => {
+                reject(e.response.data);
+              });
+          })
+        }
     },
     mounted() {   
       this.children =  this.$util.getChildren() || [];
