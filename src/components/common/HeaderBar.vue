@@ -139,6 +139,10 @@ export default {
     methods: {
       logout(){
         this.$util.setAuth(false);
+        this.$util.setUser({});
+        this.$util.setParent({});
+        this.$util.setChildren({});
+        this.$util.setInstitute({});
         this.$router.push({ name: "login" }); 
         this.$util.wait(200).then(() => {                        
           location.reload();                        

@@ -133,7 +133,7 @@
                     </div>
                   </div>
                   <div class="text-center">
-                    <button type="submit" class="btn btn-primary form-buttons">Submit</button>
+                    <button type="submit" class="btn btn-primary form-buttons" @click="register">Submit</button>
                     <button type="reset" class="btn btn-secondary">Reset</button>
                   </div>
                 </form><!-- End Horizontal Form -->
