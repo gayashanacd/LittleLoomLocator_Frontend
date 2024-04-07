@@ -55,7 +55,7 @@
                   </div>
                   
                   <div class="text-center">
-                    <button type="submit" class="btn btn-primary form-buttons" @click="addChild">{{saveButtonText}}</button>
+                    <button type="submit" class="btn btn-primary form-buttons" :disabled='!isParent' @click="addChild">{{saveButtonText}}</button>
                     <button type="reset" class="btn btn-secondary" @click="clear">Clear</button>
                   </div>
                 </form><!-- End Horizontal Form -->
@@ -76,9 +76,10 @@
     name: "AddChild",
     data() {           
         return {
-            childRequest: { firstName: "", lastName: "", gender: "", dateofbirth: "", allergy: "", parent: {}},
+            childRequest: {id:0, firstName: "", lastName: "", gender: "", dateofbirth: "", allergy: "", parent: {}},
             message: "",
-            saveButtonText: "Add"
+            saveButtonText: "Add",
+            isParent: true
         };
     },
     props: ['retreiveChildren','childId'],
@@ -87,7 +88,7 @@
             event.preventDefault();
             let parent = this.$util.getParent();
             console.log(parent);
-            if(parent){              
+            if(parent && this.childRequest.firstName && this.childRequest.lastName){              
               if (this.childRequest.id === 0){
                 this.childRequest.parent = parent;
                 ChildrenService.create(this.childRequest)
@@ -125,7 +126,16 @@
             
         },
         
+        checkParent(){
+          const parent = this.$util.getParent();
+          if (!parent | !parent.id){
+            this.isParent=false;
+          }
+        },
+
         retreiveChild(id) {            
+          const parent = this.$util.getParent();
+          if (parent && parent.id){
             ChildrenService.get(id)
                 .then(response => { 
                     this.childRequest = response.data;
@@ -135,6 +145,10 @@
                 .catch(error => {
                     console.log(error);
                 })
+            }
+            else {
+              this.isParent=false;
+            }
             
           },
           clear(){
@@ -149,7 +163,7 @@
           }
     },
     mounted() {   
-      //this.retreiveChild(this.childId);
+      this.checkParent();
     }
   };
   </script>

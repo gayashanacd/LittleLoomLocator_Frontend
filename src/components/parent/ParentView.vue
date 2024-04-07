@@ -110,7 +110,7 @@ export default {
   name: "ParentView",
   data() {           
       return {
-          parentRequest: { firstName: "", lastName: "", unit: "", building: "", street: "", city: "", province: "", postalCode: "", phone: "", email: "", 
+          parentRequest: { id:0, firstName: "", lastName: "", unit: "", building: "", street: "", city: "", province: "", postalCode: "", phone: "", email: "", 
                                   emergencyContactName: "", emergencyContactPhone: "", userId: 0 },
           message: ""
       };
@@ -120,12 +120,13 @@ export default {
           event.preventDefault();
           let user = this.$util.getUser();
           console.log(user);
-          if(user){
+          if(user && this.parentRequest.firstName && this.parentRequest.lastName){
             this.parentRequest.userId = user.id;
             if (this.parentRequest.id === 0){
               ParentService.create(this.parentRequest)
               .then(response => {
                   let parent = response.data;
+                  this.$util.setParent(parent);
                   this.message = parent;
                   this.$util.notify("Successfully saved the parent detail !", "success");
                     this.$util.wait(1000).then(() => {                        
@@ -146,6 +147,7 @@ export default {
               ParentService.update(this.parentRequest.id, this.parentRequest)
               .then(response => {
                   let parent = response.data;
+                  this.$util.setParent(parent);
                   this.message = parent;
                   this.$util.notify("Successfully updated the parent detail !", "success");
                     this.$util.wait(1000).then(() => {                        
@@ -170,7 +172,8 @@ export default {
 
       retreiveParent() {
             let parent = this.$util.getParent();
-            if(parent){
+            console.log(parent);
+            if(parent && parent.id){
               ParentService.get(parent.id)
                 .then(response => { 
                     this.parentRequest = response.data;

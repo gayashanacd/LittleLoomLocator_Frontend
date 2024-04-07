@@ -55,18 +55,23 @@ export default {
     methods: {
       retreiveChildren(){
       const parent = this.$util.getParent();
-      ParentService.getChildrenByParentId(parent.id)
-        .then(response => {       
-          if(!response.data){
-            this.$util.notify("No records found !", 'info');
-          }
-          let children = response.data;
-          console.log(children);
-          this.tableData = children;
-        })
-        .catch(e => {
-          this.$util.notify(e.response.data.message);
-        });
+      if (parent && parent.id){
+        ParentService.getChildrenByParentId(parent.id)
+          .then(response => {       
+            if(!response.data){
+              this.$util.notify("No records found !", 'info');
+            }
+            let children = response.data;
+            console.log(children);
+            this.tableData = children;
+          })
+          .catch(e => {
+            this.$util.notify(e.response.data.message);
+          });
+        }else{
+          this.$util.notify("Can not find parent information. Please update parent detail first.", "error");
+        }
+
       },
       editChild(item){
         this.selectedChildId = item.id;
