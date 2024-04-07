@@ -161,6 +161,9 @@ export default {
             console.log(request);
             this.$util.notify("Successfully submitted the request !", "success");
             this.notifyInstitute();
+            this.$util.wait(500).then(() => {                        
+              this.$parent.$refs.PastRequests.fetchRequests();                      
+            })  
           })
           .catch(e => {
             this.$util.notify(e.response.data, "error");

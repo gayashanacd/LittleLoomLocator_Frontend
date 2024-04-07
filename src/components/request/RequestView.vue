@@ -1,6 +1,6 @@
 <template>
     <div >
-      <RequestMoreInfoModal :currentItem="currentItem"></RequestMoreInfoModal>
+      <RequestMoreInfoModal :currentItem="currentItem" ref="RequestMoreInfoModal"></RequestMoreInfoModal>
       <div class="pagetitle">
         <h1>Request</h1>
       </div><!-- End Page Title -->
@@ -110,7 +110,7 @@
                     </div>
                   </div>
                   <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                    <PastRequests></PastRequests>
+                    <PastRequests ref="PastRequests"></PastRequests>
                   </div>
                 </div><!-- End Default Tabs -->
               </div>
@@ -136,20 +136,7 @@ export default {
     name: "RequestView",
     data() {           
         return {
-          tableData : [
-            // { instituteId : 1, institute : "Institute 1", program : "Program 1", ageGroup : "36 Months Below", city : "Burnaby", capacity : "25/40", waitlist : "Yes" },
-            // { instituteId : 2, institute : "Institute 2", program : "Program 2", ageGroup : "3-5 Years", city : "Burnaby", capacity : "10/40", waitlist : "No" },
-            // { instituteId : 3, institute : "Institute 3", program : "Program 3", ageGroup : "36 Months Below", city : "Surrey", capacity : "29/40", waitlist : "Yes" },
-            // { instituteId : 4, institute : "Institute 4", program : "Program 4", ageGroup : "3-5 Years", city : "Burnaby", capacity : "32/40", waitlist : "No" },
-            // { instituteId : 5, institute : "Institute 5", program : "Program 5", ageGroup : "36 Months Below", city : "New Westminister", capacity : "33/40", waitlist : "Yes" },
-            // { instituteId : 6, institute : "Institute 6", program : "Program 6", ageGroup : "3-5 Years", city : "Burnaby", capacity : "35/40", waitlist : "Yes" },
-            // { instituteId : 7, institute : "Institute 7", program : "Program 7", ageGroup : "3-5 Years", city : "Surrey", capacity : "36/40", waitlist : "Yes" },
-            // { instituteId : 8, institute : "Institute 8", program : "Program 8", ageGroup : "36 Months Below", city : "New Westminister", capacity : "37/40", waitlist : "No" },
-            // { instituteId : 9, institute : "Institute 9", program : "Program 9", ageGroup : "36 Months Below", city : "Burnaby", capacity : "40/40", waitlist : "Yes" },
-            // { instituteId : 10, institute : "Institute 10", program : "Program 10", ageGroup : "3-5 Years", city : "Surrey", capacity : "19/40", waitlist : "Yes" },
-            // { instituteId : 11, institute : "Institute 11", program : "Program 11", ageGroup : "36 Months Below", city : "New Westminister", capacity : "25/40", waitlist : "No" },
-            // { instituteId : 12, institute : "Institute 12", program : "Program 12", ageGroup : "3-5 Years", city : "Surrey", capacity : "2/40", waitlist : "No" },
-          ],
+          tableData : [],
           searchParams : {
             name : "",
             province : "BC",
@@ -189,24 +176,6 @@ export default {
         this.currentItem = currentItem;
       },
       fetchChildren(){
-        // let children = [
-        //   {
-        //     "id": 1,
-        //     "firstName": "Child1 FN",
-        //     "lastName": "Child 1 LN",
-        //     "gender": "F",
-        //     "dateOfBirth": "2020-02-16",
-        //     "allergy": "No",
-        //   },
-        //   {
-        //     "id": 2,
-        //     "firstName": "Child2 FN",
-        //     "lastName": "Child 2 LN",
-        //     "gender": "F",
-        //     "dateOfBirth": "2015-06-20",
-        //     "allergy": "No",
-        //   }
-        // ];
         const parent = this.$util.getParent();
         if(!parent)
           return false;

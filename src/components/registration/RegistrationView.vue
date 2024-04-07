@@ -56,7 +56,9 @@
                                                     @click="registerUser">Register</button>
                                             </div>
                                             <div class="col-12">
-                                                <a href="pages-register.html">Back to Login</a>
+                                              <router-link to="/login" @click="routeToLogin">
+                                                Back to Login
+                                              </router-link>
                                             </div>
                                         </form>
 
@@ -89,46 +91,49 @@ export default {
         };
     },
     methods: {
-        registerUser(event) {
-            event.preventDefault();
-            if (this.registrationRequest.type.toLowerCase() === 'parent') {
-                UserRegistrationService.create(this.registrationRequest)
-                    .then(response => {
-                        this.message = response.data;
-                        this.$util.notify("Successfully registered as a parent!", "success");
-                        this.$util.wait(1000).then(() => {
-                            this.$router.push({ name: "ParentView" });
-                        })
-
+      registerUser(event) {
+          event.preventDefault();
+          if (this.registrationRequest.type.toLowerCase() === 'parent') {
+              UserRegistrationService.create(this.registrationRequest)
+                  .then(response => {
+                      this.message = response.data;
+                      this.$util.notify("Successfully registered as a parent!", "success");
+                      this.$util.wait(1000).then(() => {
+                        this.$router.push({ name: "login" });
+                        this.routeToLogin();
+                      })
+                  })
+                  .catch(error => {
+                      this.handleRegistrationError(error);
+                  });
+          } else {
+              console.log(this.registrationRequest);
+              UserRegistrationService.create(this.registrationRequest)
+                  .then(response => {
+                    this.message = response.data;
+                    this.$util.notify("Successfully registered as an institute!", "success");
+                    this.$util.wait(1000).then(() => {
+                      this.$router.push({ name: "login" });
+                      this.routeToLogin();
                     })
-                    .catch(error => {
-                        this.handleRegistrationError(error);
-                    });
-            } else {
-                console.log(this.registrationRequest);
-                UserRegistrationService.create(this.registrationRequest)
-                    .then(response => {
-                        this.message = response.data;
-                        this.$util.notify("Successfully registered as an institute!", "success");
-                        this.$util.wait(1000).then(() => {
-                            this.$router.push({ name: "InstituteView" });
-                        })
-
-                    })
-                    .catch(error => {
-                        this.handleRegistrationError(error);
-                    });
-            }
-        },
-
-        handleRegistrationError(error) {
-            this.registrationRequest.username = "";
-            this.registrationRequest.password = "";
-            this.registrationRequest.userType = "";
-            console.log(error.response);
-            this.$util.notify("Registration failed. Please try again.", "error");
-        }
-
+                  })
+                  .catch(error => {
+                    this.handleRegistrationError(error);
+                  });
+          }
+      },
+      handleRegistrationError(error) {
+          this.registrationRequest.username = "";
+          this.registrationRequest.password = "";
+          this.registrationRequest.userType = "";
+          console.log(error.response);
+          this.$util.notify("Registration failed. Please try again.", "error");
+      },
+      routeToLogin(){
+        this.$util.wait(200).then(() => {                        
+          location.reload();                        
+        })  
+      }
     },
     mounted() {
         this.message = "";

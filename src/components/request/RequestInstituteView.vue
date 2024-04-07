@@ -140,7 +140,7 @@ export default {
         });  
     },
     formatDatetime(dateTime){
-      return moment(dateTime).format('YYYY-MM-DD, h:mm:ss');
+      return moment(dateTime).format('YYYY-MM-DD, h:mm:ss A');
     },
     setCapacity(){
       const institute = this.$util.getInstitute();

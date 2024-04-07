@@ -18,7 +18,7 @@
               <td>{{ item.programName }}</td>
               <td>{{ item.childName }}</td>
               <td>{{ item.status }}</td>
-              <td>{{ item.createdDateTime }}</td>
+              <td>{{ formatDatetime(item.createdDateTime) }}</td>
               <td>
                 <div class="btn-group" role="group" v-if="item.status == 'PENDING'">
                     <button type="button" class="btn btn-danger" title="Cancel Request"><i class="bi bi-backspace-reverse" @click="cancelRequest(item)"></i></button>
@@ -34,16 +34,13 @@
 <script>
 
 import RequestService from "@/services/RequestService";
+import moment from 'moment';
 
 export default {
   name: "PastRequests",
   data() {           
     return {
-      tableData : [
-        // { instituteId : 1, institute : "Institute 1", program : "Program 1", childName : "Mellisa", status : "Pending", date : "2023/04/07" },
-        // { instituteId : 2, institute : "Institute 2", program : "Program 2", childName : "Mellisa", status : "Rejected", date : "2023/06/20" },
-        // { instituteId : 3, institute : "Institute 3", program : "Program 3", childName : "Mellisa", status : "Pending", date : "2023/06/15" }
-      ],
+      tableData : [],
     };
   },
   methods: {
@@ -75,7 +72,10 @@ export default {
         .catch(e => {
           this.$util.notify(e.response.data.message);
         });
-    } 
+    },
+    formatDatetime(dateTime){
+      return moment(dateTime).format('YYYY-MM-DD, h:mm:ss A');
+    },
   },
   mounted() {   
     this.fetchRequests();
