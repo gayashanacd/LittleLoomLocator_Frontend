@@ -44,11 +44,11 @@
                                             </div>
 
                                             <div class="col-12">
-                                                <select class="form-select" name="userType"
-                                                    v-model="registrationRequest.userType">
+                                                <select class="form-select" name="type"
+                                                    v-model="registrationRequest.type">
                                                     <option value="" selected>- Select the type - </option>
-                                                    <option value="parent">Parent</option>
-                                                    <option value="institute">Institute</option>
+                                                    <option value="PARENT">Parent</option>
+                                                    <option value="INSTITUTE">Institute</option>
                                                 </select>
                                             </div>
                                             <div class="col-12">
@@ -84,20 +84,16 @@ export default {
     name: "RegistrationView",
     data() {
         return {
-            registrationRequest: { username: "", password: "", userType: "" },
+            registrationRequest: { username: "", password: "", type: "" },
             message: ""
         };
     },
     methods: {
         registerUser(event) {
             event.preventDefault();
-            if (this.registrationRequest.userType.toLowerCase() === 'parent') {
+            if (this.registrationRequest.type.toLowerCase() === 'parent') {
                 UserRegistrationService.create(this.registrationRequest)
                     .then(response => {
-                        let user = {
-                            userType: 0
-                        };
-                        console.log('User registered:', user);
                         this.message = response.data;
                         this.$util.notify("Successfully registered as a parent!", "success");
                         this.$util.wait(1000).then(() => {
@@ -109,12 +105,9 @@ export default {
                         this.handleRegistrationError(error);
                     });
             } else {
+                console.log(this.registrationRequest);
                 UserRegistrationService.create(this.registrationRequest)
                     .then(response => {
-                        let user = {
-                            userType: 1
-                        };
-                        console.log('User registered:', user);
                         this.message = response.data;
                         this.$util.notify("Successfully registered as an institute!", "success");
                         this.$util.wait(1000).then(() => {
