@@ -153,7 +153,7 @@
 
         data(){
             return{
-                instituteRequest: { name: "", unitNumber: "", buildingNumber: "", street: "", city: "", province: "", postalCode: "", 
+                instituteRequest: {  id:0, name: "", unitNumber: "", buildingNumber: "", street: "", city: "", province: "", postalCode: "", 
                 contactName: "", contactPhone: "", webSite: "", email: "", programName: "", ageGroup: "", programCapacity: 0, 
                 programRemainingSlots: 0, waitlistingAllowed: "", waitlistCapacity: 0, userId: 0 },
                 message: ""
@@ -165,12 +165,13 @@
                 event.preventDefault();
                 let user = this.$util.getUser();
                 console.log(user);
-                if(user){
+                if(user && this.instituteRequest.name){
                     this.instituteRequest.userId = user.id;
                     if (this.instituteRequest.id === 0){
                     InstituteService.create(this.instituteRequest)
                     .then(response => {
                         let institute = response.data;
+                        this.$util.setInstitute(institute);
                         this.message = institute;
                         this.$util.notify("Successfully saved the institute detail !", "success");
                             this.$util.wait(1000).then(() => {                        
@@ -202,6 +203,7 @@
                     InstituteService.update(this.instituteRequest)
                     .then(response => {
                         let institute = response.data;
+                        this.$util.setInstitute(institute);
                         this.message = institute;
                         this.$util.notify("Successfully updated the institute detail !", "success");
                             this.$util.wait(1000).then(() => {                        
@@ -237,7 +239,8 @@
 
             retreiveInstitute() {
                     let institute = this.$util.getInstitute();
-                    if(institute){
+                    console.log(institute);
+                    if(institute && institute.id){
                     InstituteService.get(institute.id)
                         .then(response => { 
                             this.instituteRequest = response.data;
@@ -246,7 +249,7 @@
                         .catch(error => {
                             console.log(error);
                         })
-                    }
+                    }       
                 }
         },
 

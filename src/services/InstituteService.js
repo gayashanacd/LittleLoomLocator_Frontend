@@ -6,7 +6,7 @@ class InstituteService{
   }
 
   getInstituteByUserId(id){
-    return http.get(`/institutes/by_userid/${id}`);
+    return http.get(`/users/${id}/institute`);
   }
 
   get(id) {
