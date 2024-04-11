@@ -9,6 +9,10 @@ class InstituteService{
     return http.get(`/users/${id}/institute`);
   }
 
+  create(data){
+    return http.post("/institutes", data);
+  }
+
   get(id) {
       return http.get(`/institutes/${id}`);
   }

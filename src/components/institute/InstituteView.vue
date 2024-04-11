@@ -174,9 +174,9 @@
                         this.$util.setInstitute(institute);
                         this.message = institute;
                         this.$util.notify("Successfully saved the institute detail !", "success");
-                            this.$util.wait(1000).then(() => {                        
-                            this.$router.push({ name: "InstituteView" });                       
-                            })                  
+                        this.$util.wait(1000).then(() => {                        
+                          this.$router.push({ name: "InstituteView" });                       
+                        })                  
                     })
                     .catch(error => {
                         this.instituteRequest.name = "";
