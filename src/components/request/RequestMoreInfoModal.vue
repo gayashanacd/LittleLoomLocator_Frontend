@@ -128,6 +128,7 @@ export default {
     watch:{
       currentItem(newValue){
         this.currentInstitute = this.formatAddress(newValue);   
+        this.setChildren(); 
       },
       deep: true
     },
@@ -202,16 +203,19 @@ export default {
                 reject(e.response.data);
               });
           })
+        },
+        setChildren(){
+          this.children =  this.$util.getChildren() || [];
+          if(this.children.length > 0){
+            this.children.unshift({
+              id : -1,
+              firstName : '- Select Child -'
+            });
+          }
         }
     },
     mounted() {   
-      this.children =  this.$util.getChildren() || [];
-      if(this.children.length > 0){
-        this.children.unshift({
-          id : -1,
-          firstName : '- Select Child -'
-        });
-      }
+      this.setChildren();  
     }
 };
 </script>
