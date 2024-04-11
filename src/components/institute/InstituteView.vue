@@ -168,6 +168,7 @@
                 if(user && this.instituteRequest.name){
                     this.instituteRequest.userId = user.id;
                     if (this.instituteRequest.id === 0){
+                      this.instituteRequest.programRemainingSlots =  this.instituteRequest.programCapacity;  
                     InstituteService.create(this.instituteRequest)
                     .then(response => {
                         let institute = response.data;

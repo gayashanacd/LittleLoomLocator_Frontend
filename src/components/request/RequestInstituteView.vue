@@ -22,7 +22,7 @@
                   <option selected value="">- Select Status -</option>
                   <option value="PENDING">Pending</option>
                   <option value="CONFIRMED">Confirmed</option>
-                  <option value="CONFIRMED">Confirmed</option>
+                  <option value="REJECTED">Rejected</option>
                   <option value="CANCELLED">Cancelled</option>
                 </select>
               </div> 
