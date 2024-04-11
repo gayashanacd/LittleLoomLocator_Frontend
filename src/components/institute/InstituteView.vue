@@ -37,7 +37,7 @@
                     </div>
                     <div class="col-md-3">
                       <select id="inputProvince" class="form-select" v-model="instituteRequest.province">
-                        <option selected>Select Province</option>
+                        <option value="-1">Select Province</option>
                         <option value="AB">Alberta</option>
                         <option value="BC">British Columbia</option>
                         <option value="MB">Manitoba</option>
@@ -97,7 +97,7 @@
                                     <label for="inputAgeGroup" class="col-sm-2 col-form-label">Age Group</label>
                                     <div class="col-md-3">
                                         <select id="inputAgeGroup" class="form-select" v-model="instituteRequest.ageGroup">
-                                            <option selected>Select Age Group</option>
+                                            <option value="-1">Select Age Group</option>
                                             <option value="UNDER_36_MONTHS">Under 36 months</option>
                                             <option value="BETWEEN_3_5_YEARS">Between 3 and 5 years</option>
                                         </select>
@@ -153,8 +153,8 @@
 
         data(){
             return{
-                instituteRequest: {  id:0, name: "", unitNumber: "", buildingNumber: "", street: "", city: "", province: "", postalCode: "", 
-                contactName: "", contactPhone: "", webSite: "", email: "", programName: "", ageGroup: "", programCapacity: 0, 
+                instituteRequest: {  id:0, name: "", unitNumber: "", buildingNumber: "", street: "", city: "", province: "-1", postalCode: "", 
+                contactName: "", contactPhone: "", webSite: "", email: "", programName: "", ageGroup: "-1", programCapacity: 0, 
                 programRemainingSlots: 0, waitlistingAllowed: "", waitlistCapacity: 0, userId: 0 },
                 message: ""
             };
@@ -175,7 +175,7 @@
                         this.message = institute;
                         this.$util.notify("Successfully saved the institute detail !", "success");
                         this.$util.wait(1000).then(() => {                        
-                          this.$router.push({ name: "InstituteView" });                       
+                          this.$router.push({ name: "RequestView" });                       
                         })                  
                     })
                     .catch(error => {
@@ -207,7 +207,7 @@
                         this.message = institute;
                         this.$util.notify("Successfully updated the institute detail !", "success");
                             this.$util.wait(1000).then(() => {                        
-                            this.$router.push({ name: "InstituteView" });                       
+                            this.$router.push({ name: "RequestView" });                       
                             })
                     })
                     .catch(error => {
